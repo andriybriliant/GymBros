@@ -1,4 +1,4 @@
-package com.andriibryliant.gymbros.app
+package com.andriibryliant.gymbros
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
