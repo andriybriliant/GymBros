@@ -1,6 +1,6 @@
 package com.andriibryliant.gymbros.domain.model
 
-data class ExerciseSet(
+data class Set(
     val id: Long = 0,
     val reps: Int,
     val weight: Double
