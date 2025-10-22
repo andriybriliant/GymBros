@@ -19,6 +19,8 @@ import androidx.room.PrimaryKey
 )
 data class SetEntity(
     @PrimaryKey(autoGenerate = true) val setId: Long = 0L,
+    val exerciseId: Long,
+    val setNumber: Int,
     val reps: Int,
     val weight: Double
 )
