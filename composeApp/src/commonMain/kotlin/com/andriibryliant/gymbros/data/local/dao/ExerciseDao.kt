@@ -28,5 +28,4 @@ interface ExerciseDao {
     @Transaction
     @Query("SELECT * FROM exercises ORDER BY name ASC")
     suspend fun getAllExercisesWithMuscleGroups(): List<ExerciseWithMuscleGroups>
-
 }

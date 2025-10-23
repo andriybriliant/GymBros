@@ -6,10 +6,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.andriibryliant.gymbros.data.local.entity.SetEntity
 import com.andriibryliant.gymbros.data.local.entity.WorkoutEntity
 import com.andriibryliant.gymbros.data.local.entity.WorkoutExerciseEntity
 import com.andriibryliant.gymbros.data.local.relation.WorkoutWithExercises
+import com.andriibryliant.gymbros.data.mapper.toEntity
+import com.andriibryliant.gymbros.domain.model.Workout
+import com.andriibryliant.gymbros.domain.model.WorkoutExercise
 import kotlinx.datetime.LocalDate
 
 @Dao
@@ -23,17 +27,37 @@ interface WorkoutDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSet(setEntity: SetEntity): Long
 
+    @Update
+    suspend fun updateWorkout(workout: WorkoutEntity)
+
+    @Update
+    suspend fun updateWorkoutExercise(workoutExercise: WorkoutExerciseEntity)
+
+    @Update
+    suspend fun updateSet(setEntity: SetEntity)
+
     @Transaction
-    suspend fun insertFullWorkout(workout: WorkoutWithExercises){
-        val workoutId = insertWorkout(workout.workout)
-        workout.exercises.forEach { exerciseAndSets ->
-            val exerciseId = insertWorkoutExercise(
-                exerciseAndSets.workoutExercise.copy(workoutId = workoutId)
-            )
-            exerciseAndSets.sets.forEach { setEntity ->
-                insertSet(
-                    setEntity.copy(exerciseId = exerciseId)
-                )
+    suspend fun insertFullWorkout(
+        workout: Workout,
+        workoutExercises: List<WorkoutExerciseEntity>,
+        workoutSets: List<SetEntity>
+    ){
+        val workoutId = if(workout.id == 0L) insertWorkout(workout.toEntity()) else{
+            updateWorkout(workout.toEntity())
+            workout.id
+        }
+
+        workoutExercises.forEach { entity ->
+            val exerciseId = if(entity.workoutExerciseId == 0L) insertWorkoutExercise(entity) else {
+                updateWorkoutExercise(entity.copy(workoutId = workoutId))
+                entity.workoutExerciseId
+            }
+
+            workoutSets.forEach { entity ->
+                val setId = if(entity.setId == 0L) insertSet(entity) else{
+                    updateSet(entity.copy(exerciseId = exerciseId))
+                    entity.setId
+                }
             }
         }
     }
