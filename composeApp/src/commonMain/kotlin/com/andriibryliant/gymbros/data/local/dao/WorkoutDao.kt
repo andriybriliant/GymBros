@@ -14,6 +14,7 @@ import com.andriibryliant.gymbros.data.local.relation.WorkoutWithExercises
 import com.andriibryliant.gymbros.data.mapper.toEntity
 import com.andriibryliant.gymbros.domain.model.Workout
 import com.andriibryliant.gymbros.domain.model.WorkoutExercise
+import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 
 @Dao
@@ -64,16 +65,16 @@ interface WorkoutDao {
 
     @Transaction
     @Query("SELECT * FROM workouts ORDER BY date DESC")
-    suspend fun getAllWorkouts(): List<WorkoutWithExercises>
+    fun getAllWorkouts(): Flow<List<WorkoutWithExercises>>
 
     @Transaction
     @Query("SELECT * FROM workouts WHERE date = :date ")
-    suspend fun getWorkoutsByDate(date: LocalDate): List<WorkoutWithExercises>
+    fun getWorkoutsByDate(date: LocalDate): Flow<List<WorkoutWithExercises>>
 
     @Transaction
     @Query("SELECT * FROM workouts WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
-    suspend fun getWorkoutsByDateRange(startDate: LocalDate, endDate: LocalDate): List<WorkoutWithExercises>
+    fun getWorkoutsByDateRange(startDate: LocalDate, endDate: LocalDate): Flow<List<WorkoutWithExercises>>
 
     @Delete
-    suspend fun deleteWorkout(workout: WorkoutEntity)
+    suspend fun deleteWorkout(workoutId: Long)
 }

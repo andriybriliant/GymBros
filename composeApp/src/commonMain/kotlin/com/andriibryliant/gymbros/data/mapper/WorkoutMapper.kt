@@ -2,6 +2,7 @@ package com.andriibryliant.gymbros.data.mapper
 
 import com.andriibryliant.gymbros.data.local.entity.SetEntity
 import com.andriibryliant.gymbros.data.local.entity.WorkoutEntity
+import com.andriibryliant.gymbros.data.local.entity.WorkoutExerciseEntity
 import com.andriibryliant.gymbros.data.local.relation.WorkoutWithExercises
 import com.andriibryliant.gymbros.domain.model.Set
 import com.andriibryliant.gymbros.domain.model.Workout
@@ -34,9 +35,42 @@ fun WorkoutWithExercises.toDomain(): Workout =
                     Set(
                         id = setEntity.setId,
                         reps = setEntity.reps,
-                        weight = setEntity.weight
+                        weight = setEntity.weight,
+                        setNumber = setEntity.setNumber
                     )
-                }
+                },
+                workoutId = exerciseWithExerciseAndSets.workoutExercise.workoutId,
+                orderInWorkout = exerciseWithExerciseAndSets.workoutExercise.orderInWorkout
             )
         }
     )
+
+fun Workout.toWorkoutExercisesEntities() : List<WorkoutExerciseEntity>{
+    val exercises = this.exercises.map { exercise ->
+        WorkoutExerciseEntity(
+            workoutExerciseId = exercise.id,
+            workoutId = exercise.workoutId,
+            exerciseId = exercise.exercise.id,
+            orderInWorkout = exercise.orderInWorkout
+        )
+    }
+
+    return exercises
+}
+
+fun Workout.toSetEntities(): List<SetEntity>{
+    val sets: List<SetEntity> = this.exercises.flatMap { exercise ->
+        exercise.sets.map { set ->
+            SetEntity(
+                setId = set.id,
+                exerciseId = exercise.id,
+                setNumber = set.setNumber,
+                reps = set.reps,
+                weight = set.weight
+            )
+        }
+    }
+
+    return sets
+}
+

@@ -1,7 +1,9 @@
 package com.andriibryliant.gymbros.data.mapper
 
 import com.andriibryliant.gymbros.data.local.entity.ExerciseEntity
+import com.andriibryliant.gymbros.data.local.relation.ExerciseWithMuscleGroups
 import com.andriibryliant.gymbros.domain.model.Exercise
+import com.andriibryliant.gymbros.domain.model.MuscleGroup
 
 fun ExerciseEntity.toDomain(): Exercise =
     Exercise(
@@ -15,4 +17,17 @@ fun Exercise.toEntity(): ExerciseEntity =
         exerciseId = id,
         name = name,
         iconResName = iconResName
+    )
+
+fun ExerciseWithMuscleGroups.toDomain(): Exercise =
+    Exercise(
+        id = exercise.exerciseId,
+        name = exercise.name,
+        iconResName = exercise.iconResName,
+        muscleGroups = muscleGroups.map { entity ->
+            MuscleGroup(
+                id = entity.muscleGroupId,
+                name = entity.name
+            )
+        }
     )
