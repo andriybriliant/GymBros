@@ -1,5 +1,6 @@
 package com.andriibryliant.gymbros.data.local
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -25,7 +26,12 @@ import com.andriibryliant.gymbros.data.local.entity.WorkoutExerciseEntity
     version = 1
 )
 @TypeConverters(Converters::class)
+@ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase: RoomDatabase() {
-    abstract fun workoutDao(): WorkoutDao
-    abstract fun exerciseDao(): ExerciseDao
+    abstract val workoutDao: WorkoutDao
+    abstract val exerciseDao: ExerciseDao
+
+    companion object{
+        const val DB_NAME = "app.db"
+    }
 }
