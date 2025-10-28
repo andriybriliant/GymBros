@@ -12,14 +12,14 @@ class DefaultExerciseRepository(
     private val db: AppDatabase
 ): ExerciseRepository {
     override fun getAllExercises(): Flow<List<Exercise>> {
-        return db.exerciseDao().getAllExercisesWithMuscleGroups().map { list ->
+        return db.exerciseDao.getAllExercisesWithMuscleGroups().map { list ->
             list.map { it.toDomain() }
         }
     }
 
     override suspend fun insertExercise(exercise: Exercise) {
         exercise.muscleGroups.forEach { muscleGroup ->
-            db.exerciseDao().insertExerciseMuscleGroupCrossRef(
+            db.exerciseDao.insertExerciseMuscleGroupCrossRef(
                 ExerciseMuscleGroupCrossRef(
                     exercise.id,
                     muscleGroup.id
@@ -29,6 +29,6 @@ class DefaultExerciseRepository(
     }
 
     override suspend fun deleteExercise(exerciseId: Long) {
-        db.exerciseDao().deleteExercise(exerciseId)
+        db.exerciseDao.deleteExercise(exerciseId)
     }
 }

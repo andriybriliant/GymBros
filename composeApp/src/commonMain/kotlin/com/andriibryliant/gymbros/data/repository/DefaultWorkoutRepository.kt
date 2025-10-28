@@ -14,32 +14,32 @@ class DefaultWorkoutRepository(
     private val db: AppDatabase
 ): WorkoutRepository {
     override fun getWorkoutsByDate(date: LocalDate): Flow<List<Workout>> {
-        return db.workoutDao().getWorkoutsByDate(date).map { list -> list.map { it.toDomain() } }
+        return db.workoutDao.getWorkoutsByDate(date).map { list -> list.map { it.toDomain() } }
     }
 
     override fun getWorkoutsByDateRange(
         startDate: LocalDate,
         endDate: LocalDate
     ): Flow<List<Workout>> {
-        return db.workoutDao().getWorkoutsByDateRange(startDate, endDate).map { list ->
+        return db.workoutDao.getWorkoutsByDateRange(startDate, endDate).map { list ->
             list.map { it.toDomain() }
         }
     }
 
     override fun getAllWorkouts(): Flow<List<Workout>> {
-        return db.workoutDao().getAllWorkouts().map { list ->
+        return db.workoutDao.getAllWorkouts().map { list ->
             list.map { it.toDomain() }
         }
     }
 
     override suspend fun insertWorkout(workout: Workout) {
-        db.workoutDao().insertFullWorkout(workout,
+        db.workoutDao.insertFullWorkout(workout,
             workout.toWorkoutExercisesEntities(),
             workout.toSetEntities()
         )
     }
 
     override suspend fun deleteWorkout(workoutId: Long) {
-        db.workoutDao().deleteWorkout(workoutId)
+        db.workoutDao.deleteWorkout(workoutId)
     }
 }

@@ -1,4 +1,4 @@
-package com.andriibryliant.gymbros.domain.usecase
+package com.andriibryliant.gymbros.domain.usecase.workout
 
 data class WorkoutUseCases(
     val getWorkoutsByDateUseCase: GetWorkoutsByDateUseCase,
