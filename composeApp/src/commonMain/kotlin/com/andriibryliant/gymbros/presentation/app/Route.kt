@@ -11,7 +11,7 @@ sealed interface Route {
     data object Home: Route
 
     @Serializable
-    data class WorkoutDetail(val id: String): Route
+    data class WorkoutDetail(val id: Long): Route
 
     @Serializable
     data object AddWorkout: Route
@@ -20,7 +20,7 @@ sealed interface Route {
     data object ChooseExercise: Route
 
     @Serializable
-    data class ExerciseDetail(val id: String): Route
+    data class ExerciseDetail(val id: Long): Route
 
     @Serializable
     data object AddExercise: Route
