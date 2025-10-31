@@ -8,6 +8,7 @@ interface WorkoutRepository {
     fun getWorkoutsByDate(date: LocalDate): Flow<List<Workout>>
     fun getWorkoutsByDateRange(startDate: LocalDate, endDate: LocalDate): Flow<List<Workout>>
     fun getAllWorkouts(): Flow<List<Workout>>
+    fun getWorkoutById(id: Long): Flow<Workout?>
     suspend fun insertWorkout(workout: Workout)
-    suspend fun deleteWorkout(workoutId: Long)
+    suspend fun deleteWorkout(workout: Workout)
 }

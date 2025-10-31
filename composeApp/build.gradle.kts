@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -35,6 +37,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.compose)
+            implementation("io.insert-koin:koin-android:4.1.1")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -46,6 +49,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             api(libs.koin.core)
+            implementation(project.dependencies.platform("io.insert-koin:koin-bom:4.1.1"))
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
             implementation(libs.jetbrains.compose.navigation)
@@ -93,7 +97,9 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.compose.viewmodel.navigation)
-    implementation(project.dependencies.platform("io.insert-koin:koin-bom:4.1.1"))
+    ksp(libs.androidx.room.compiler)
+    add("kspAndroid", "io.insert-koin:koin-ksp-compiler:1.3.0")
+
     implementation(libs.koin.core)
 }
 

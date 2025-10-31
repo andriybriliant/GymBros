@@ -1,7 +1,9 @@
 package com.andriibryliant.gymbros.data.repository
 
 import com.andriibryliant.gymbros.data.local.AppDatabase
+import com.andriibryliant.gymbros.data.local.entity.WorkoutEntity
 import com.andriibryliant.gymbros.data.mapper.toDomain
+import com.andriibryliant.gymbros.data.mapper.toEntity
 import com.andriibryliant.gymbros.data.mapper.toSetEntities
 import com.andriibryliant.gymbros.data.mapper.toWorkoutExercisesEntities
 import com.andriibryliant.gymbros.domain.model.Workout
@@ -32,6 +34,12 @@ class DefaultWorkoutRepository(
         }
     }
 
+    override fun getWorkoutById(id: Long): Flow<Workout?> {
+        return db.workoutDao.getWorkoutById(id).map { workout ->
+            workout?.toDomain()
+        }
+    }
+
     override suspend fun insertWorkout(workout: Workout) {
         db.workoutDao.insertFullWorkout(workout,
             workout.toWorkoutExercisesEntities(),
@@ -39,7 +47,7 @@ class DefaultWorkoutRepository(
         )
     }
 
-    override suspend fun deleteWorkout(workoutId: Long) {
-        db.workoutDao.deleteWorkout(workoutId)
+    override suspend fun deleteWorkout(workout: Workout) {
+        db.workoutDao.deleteWorkout(workout.toEntity())
     }
 }

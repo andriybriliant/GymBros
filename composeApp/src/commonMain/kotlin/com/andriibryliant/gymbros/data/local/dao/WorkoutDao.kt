@@ -54,10 +54,10 @@ interface WorkoutDao {
                 entity.workoutExerciseId
             }
 
-            workoutSets.forEach { entity ->
-                val setId = if(entity.setId == 0L) insertSet(entity) else{
-                    updateSet(entity.copy(exerciseId = exerciseId))
-                    entity.setId
+            workoutSets.forEach { set ->
+                val setId = if(set.setId == 0L) insertSet(set) else{
+                    updateSet(set.copy(exerciseId = exerciseId))
+                    set.setId
                 }
             }
         }
@@ -68,6 +68,10 @@ interface WorkoutDao {
     fun getAllWorkouts(): Flow<List<WorkoutWithExercises>>
 
     @Transaction
+    @Query("SELECT * FROM workouts WHERE workoutId = :id")
+    fun getWorkoutById(id: Long): Flow<WorkoutWithExercises?>
+
+    @Transaction
     @Query("SELECT * FROM workouts WHERE date = :date ")
     fun getWorkoutsByDate(date: LocalDate): Flow<List<WorkoutWithExercises>>
 
@@ -76,5 +80,5 @@ interface WorkoutDao {
     fun getWorkoutsByDateRange(startDate: LocalDate, endDate: LocalDate): Flow<List<WorkoutWithExercises>>
 
     @Delete
-    suspend fun deleteWorkout(workoutId: Long)
+    suspend fun deleteWorkout(workout: WorkoutEntity)
 }

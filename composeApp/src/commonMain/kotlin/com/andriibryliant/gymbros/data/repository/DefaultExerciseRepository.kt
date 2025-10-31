@@ -1,8 +1,10 @@
 package com.andriibryliant.gymbros.data.repository
 
 import com.andriibryliant.gymbros.data.local.AppDatabase
+import com.andriibryliant.gymbros.data.local.entity.ExerciseEntity
 import com.andriibryliant.gymbros.data.local.entity.ExerciseMuscleGroupCrossRef
 import com.andriibryliant.gymbros.data.mapper.toDomain
+import com.andriibryliant.gymbros.data.mapper.toEntity
 import com.andriibryliant.gymbros.domain.model.Exercise
 import com.andriibryliant.gymbros.domain.repository.ExerciseRepository
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +20,7 @@ class DefaultExerciseRepository(
     }
 
     override suspend fun insertExercise(exercise: Exercise) {
+        db.exerciseDao.insertExercise(exercise.toEntity())
         exercise.muscleGroups.forEach { muscleGroup ->
             db.exerciseDao.insertExerciseMuscleGroupCrossRef(
                 ExerciseMuscleGroupCrossRef(
@@ -28,7 +31,7 @@ class DefaultExerciseRepository(
         }
     }
 
-    override suspend fun deleteExercise(exerciseId: Long) {
-        db.exerciseDao.deleteExercise(exerciseId)
+    override suspend fun deleteExercise(exercise: Exercise) {
+        db.exerciseDao.deleteExercise(exercise.toEntity())
     }
 }

@@ -25,7 +25,7 @@ interface ExerciseDao {
     suspend fun updateExercise(exerciseEntity: ExerciseEntity)
 
     @Delete
-    suspend fun deleteExercise(exerciseId: Long)
+    suspend fun deleteExercise(exerciseEntity: ExerciseEntity)
 
     @Query("SELECT * FROM exercises ORDER BY name ASC")
     suspend fun getAllExercises(): List<ExerciseEntity>

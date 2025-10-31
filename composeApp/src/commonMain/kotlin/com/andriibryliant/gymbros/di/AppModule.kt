@@ -13,12 +13,15 @@ import com.andriibryliant.gymbros.domain.usecase.exercise.GetAllExercisesUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.InsertExerciseUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.DeleteWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetAllWorkoutsUseCase
+import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutByIdUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutsByDateRangeUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutsByDateUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.InsertWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.WorkoutUseCases
+import com.andriibryliant.gymbros.presentation.workout.WorkoutViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -42,6 +45,7 @@ val appModule = module {
             getWorkoutsByDateUseCase = GetWorkoutsByDateUseCase(get()),
             getWorkoutsByDateRangeUseCase = GetWorkoutsByDateRangeUseCase(get()),
             getAllWorkoutsUseCase = GetAllWorkoutsUseCase(get()),
+            getWorkoutByIdUseCase = GetWorkoutByIdUseCase(get()),
             insertWorkoutUseCase = InsertWorkoutUseCase(get()),
             deleteWorkoutUseCase = DeleteWorkoutUseCase(get())
         )
@@ -54,4 +58,6 @@ val appModule = module {
             deleteExerciseUseCase = DeleteExerciseUseCase(get())
         )
     }
+
+    viewModelOf(::WorkoutViewModel)
 }
