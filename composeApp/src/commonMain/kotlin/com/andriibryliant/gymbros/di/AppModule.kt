@@ -22,11 +22,8 @@ import com.andriibryliant.gymbros.domain.usecase.workout.InsertSetUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.InsertWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.UpdateSetUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.WorkoutUseCases
-import com.andriibryliant.gymbros.presentation.placeholder.workout.WorkoutViewModel
-import com.andriibryliant.gymbros.presentation.placeholder.workout.workout_details.WorkoutDetailViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -68,6 +65,4 @@ val appModule = module {
         )
     }
 
-    viewModelOf(::WorkoutViewModel)
-    viewModelOf(::WorkoutDetailViewModel)
 }
