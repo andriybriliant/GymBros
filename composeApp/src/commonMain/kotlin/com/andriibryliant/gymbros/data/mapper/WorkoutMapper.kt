@@ -36,7 +36,8 @@ fun WorkoutWithExercises.toDomain(): Workout =
                         id = setEntity.setId,
                         reps = setEntity.reps,
                         weight = setEntity.weight,
-                        setNumber = setEntity.setNumber
+                        setNumber = setEntity.setNumber,
+                        workoutExerciseId = setEntity.exerciseId
                     )
                 },
                 workoutId = exerciseWithExerciseAndSets.workoutExercise.workoutId,
@@ -73,4 +74,20 @@ fun Workout.toSetEntities(): List<SetEntity>{
 
     return sets
 }
+
+fun Set.toEntity() = SetEntity(
+    setId = id,
+    exerciseId = workoutExerciseId,
+    setNumber = setNumber,
+    reps = reps,
+    weight = weight
+)
+
+fun SetEntity.toDomain() = Set(
+    id = setId,
+    workoutExerciseId = exerciseId,
+    setNumber = setNumber,
+    reps = reps,
+    weight = weight
+)
 

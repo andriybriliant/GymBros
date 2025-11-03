@@ -11,14 +11,19 @@ import com.andriibryliant.gymbros.domain.usecase.exercise.DeleteExerciseUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.ExerciseUseCases
 import com.andriibryliant.gymbros.domain.usecase.exercise.GetAllExercisesUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.InsertExerciseUseCase
+import com.andriibryliant.gymbros.domain.usecase.workout.DeleteSetUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.DeleteWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetAllWorkoutsUseCase
+import com.andriibryliant.gymbros.domain.usecase.workout.GetSetsForExerciseUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutByIdUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutsByDateRangeUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutsByDateUseCase
+import com.andriibryliant.gymbros.domain.usecase.workout.InsertSetUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.InsertWorkoutUseCase
+import com.andriibryliant.gymbros.domain.usecase.workout.UpdateSetUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.WorkoutUseCases
-import com.andriibryliant.gymbros.presentation.workout.WorkoutViewModel
+import com.andriibryliant.gymbros.presentation.placeholder.workout.WorkoutViewModel
+import com.andriibryliant.gymbros.presentation.placeholder.workout.workout_details.WorkoutDetailViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -47,7 +52,11 @@ val appModule = module {
             getAllWorkoutsUseCase = GetAllWorkoutsUseCase(get()),
             getWorkoutByIdUseCase = GetWorkoutByIdUseCase(get()),
             insertWorkoutUseCase = InsertWorkoutUseCase(get()),
-            deleteWorkoutUseCase = DeleteWorkoutUseCase(get())
+            insertSetUseCase = InsertSetUseCase(get()),
+            updateSetUseCase = UpdateSetUseCase(get()),
+            getSetsForExerciseUseCase = GetSetsForExerciseUseCase(get()),
+            deleteWorkoutUseCase = DeleteWorkoutUseCase(get()),
+            deleteSetUseCase = DeleteSetUseCase(get())
         )
     }
 
@@ -60,4 +69,5 @@ val appModule = module {
     }
 
     viewModelOf(::WorkoutViewModel)
+    viewModelOf(::WorkoutDetailViewModel)
 }

@@ -6,6 +6,7 @@ import com.andriibryliant.gymbros.data.mapper.toDomain
 import com.andriibryliant.gymbros.data.mapper.toEntity
 import com.andriibryliant.gymbros.data.mapper.toSetEntities
 import com.andriibryliant.gymbros.data.mapper.toWorkoutExercisesEntities
+import com.andriibryliant.gymbros.domain.model.Set
 import com.andriibryliant.gymbros.domain.model.Workout
 import com.andriibryliant.gymbros.domain.repository.WorkoutRepository
 import kotlinx.coroutines.flow.Flow
@@ -47,7 +48,25 @@ class DefaultWorkoutRepository(
         )
     }
 
+    override suspend fun insertSet(set: Set) {
+        db.workoutDao.insertSet(set.toEntity())
+    }
+
+    override suspend fun updateSet(set: Set) {
+        db.workoutDao.updateSet(set.toEntity())
+    }
+
+    override fun getSetsForExercise(exerciseId: Long): Flow<List<Set>> {
+        return db.workoutDao.getSetsForExercise(exerciseId).map { sets ->
+            sets.map { it.toDomain() }
+        }
+    }
+
     override suspend fun deleteWorkout(workout: Workout) {
         db.workoutDao.deleteWorkout(workout.toEntity())
+    }
+
+    override suspend fun deleteSet(set: Set) {
+        db.workoutDao.deleteSet(set.id)
     }
 }

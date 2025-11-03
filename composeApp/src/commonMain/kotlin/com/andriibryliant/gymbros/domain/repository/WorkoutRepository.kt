@@ -1,5 +1,6 @@
 package com.andriibryliant.gymbros.domain.repository
 
+import com.andriibryliant.gymbros.domain.model.Set
 import com.andriibryliant.gymbros.domain.model.Workout
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
@@ -10,5 +11,9 @@ interface WorkoutRepository {
     fun getAllWorkouts(): Flow<List<Workout>>
     fun getWorkoutById(id: Long): Flow<Workout?>
     suspend fun insertWorkout(workout: Workout)
+    suspend fun insertSet(set: Set)
+    suspend fun updateSet(set: Set)
+    fun getSetsForExercise(exerciseId: Long): Flow<List<Set>>
     suspend fun deleteWorkout(workout: Workout)
+    suspend fun deleteSet(set: Set)
 }

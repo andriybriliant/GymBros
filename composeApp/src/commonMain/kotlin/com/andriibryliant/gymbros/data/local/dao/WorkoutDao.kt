@@ -12,6 +12,7 @@ import com.andriibryliant.gymbros.data.local.entity.WorkoutEntity
 import com.andriibryliant.gymbros.data.local.entity.WorkoutExerciseEntity
 import com.andriibryliant.gymbros.data.local.relation.WorkoutWithExercises
 import com.andriibryliant.gymbros.data.mapper.toEntity
+import com.andriibryliant.gymbros.domain.model.Set
 import com.andriibryliant.gymbros.domain.model.Workout
 import com.andriibryliant.gymbros.domain.model.WorkoutExercise
 import kotlinx.coroutines.flow.Flow
@@ -49,13 +50,13 @@ interface WorkoutDao {
         }
 
         workoutExercises.forEach { entity ->
-            val exerciseId = if(entity.workoutExerciseId == 0L) insertWorkoutExercise(entity) else {
+            val exerciseId = if(entity.workoutExerciseId == 0L) insertWorkoutExercise(entity.copy(workoutId = workoutId)) else {
                 updateWorkoutExercise(entity.copy(workoutId = workoutId))
                 entity.workoutExerciseId
             }
 
             workoutSets.forEach { set ->
-                val setId = if(set.setId == 0L) insertSet(set) else{
+                val setId = if(set.setId == 0L) insertSet(set.copy(exerciseId = exerciseId)) else{
                     updateSet(set.copy(exerciseId = exerciseId))
                     set.setId
                 }
@@ -79,6 +80,12 @@ interface WorkoutDao {
     @Query("SELECT * FROM workouts WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
     fun getWorkoutsByDateRange(startDate: LocalDate, endDate: LocalDate): Flow<List<WorkoutWithExercises>>
 
+    @Query("SELECT * FROM sets WHERE exerciseId = :id")
+    fun getSetsForExercise(id: Long): Flow<List<SetEntity>>
+
     @Delete
     suspend fun deleteWorkout(workout: WorkoutEntity)
+
+    @Query("DELETE FROM sets WHERE setId = :setId")
+    suspend fun deleteSet(setId: Long)
 }
