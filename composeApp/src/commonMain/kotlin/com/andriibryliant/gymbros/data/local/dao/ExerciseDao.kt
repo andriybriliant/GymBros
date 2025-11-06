@@ -9,6 +9,7 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.andriibryliant.gymbros.data.local.entity.ExerciseEntity
 import com.andriibryliant.gymbros.data.local.entity.ExerciseMuscleGroupCrossRef
+import com.andriibryliant.gymbros.data.local.entity.MuscleGroupEntity
 import com.andriibryliant.gymbros.data.local.relation.ExerciseWithMuscleGroups
 import kotlinx.coroutines.flow.Flow
 
@@ -24,11 +25,42 @@ interface ExerciseDao {
     @Update
     suspend fun updateExercise(exerciseEntity: ExerciseEntity)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAllMuscleGroups(groups: List<MuscleGroupEntity>)
+
+    @Query("SELECT * FROM exercises WHERE exerciseId = :exerciseId")
+    fun getExerciseById(exerciseId: Long): Flow<ExerciseWithMuscleGroups?>
+
+    @Query("SELECT * FROM muscle_groups ORDER BY name")
+    fun getAllMuscleGroups(): Flow<List<MuscleGroupEntity>>
+
     @Delete
     suspend fun deleteExercise(exerciseEntity: ExerciseEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCrossRefs(crossRefs: List<ExerciseMuscleGroupCrossRef>)
+
+    @Query("DELETE FROM exercisemusclegroupcrossref WHERE exerciseId = :exerciseId")
+    suspend fun deleteCrossRefsForExercise(exerciseId: Long)
+
+    @Transaction
+    suspend fun updateExerciseWithMuscles(
+        exercise: ExerciseEntity,
+        muscleGroups: List<MuscleGroupEntity>
+    ) {
+        updateExercise(exercise)
+        deleteCrossRefsForExercise(exercise.exerciseId)
+        val newRefs = muscleGroups.map {
+            ExerciseMuscleGroupCrossRef(
+                exerciseId = exercise.exerciseId,
+                muscleGroupId = it.muscleGroupId
+            )
+        }
+        insertCrossRefs(newRefs)
+    }
+
     @Query("SELECT * FROM exercises ORDER BY name ASC")
-    suspend fun getAllExercises(): List<ExerciseEntity>
+    fun getAllExercises(): Flow<List<ExerciseEntity>>
 
     @Transaction
     @Query("SELECT * FROM exercises ORDER BY name ASC")

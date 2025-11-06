@@ -1,0 +1,134 @@
+package com.andriibryliant.gymbros.presentation.exercise.add_exercise
+
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.andriibryliant.gymbros.domain.model.Exercise
+import com.andriibryliant.gymbros.domain.model.MuscleGroup
+import com.andriibryliant.gymbros.domain.model.StoredIconResName
+import com.andriibryliant.gymbros.domain.usecase.exercise.ExerciseUseCases
+import gymbros.composeapp.generated.resources.Res
+import gymbros.composeapp.generated.resources.compose_multiplatform
+import gymbros.composeapp.generated.resources.no_name_specified
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.InternalResourceApi
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+import kotlin.collections.emptyList
+
+class AddExerciseViewModel(
+    private val useCases: ExerciseUseCases
+) : ViewModel(){
+
+    private val _muscleGroups = useCases.getMuscleGroupsUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
+    private val _selectedExercise = MutableStateFlow<Exercise?>(null)
+    val selectedExercise = _selectedExercise.asStateFlow()
+
+    val muscleGroups = _muscleGroups
+    var exerciseName by mutableStateOf("")
+        private set
+
+    private var exerciseId by mutableStateOf<Long?>(null)
+
+    var nameError by mutableStateOf<StringResource?>(null)
+        private set
+
+    private var selectedIconName by mutableStateOf("c")
+
+    @OptIn(InternalResourceApi::class)
+    var selectedIcon by mutableStateOf(Res.drawable.compose_multiplatform)
+        private set
+
+    var selectedMuscleGroups = mutableStateListOf<MuscleGroup>()
+        private set
+
+
+    fun onSelectExercise(id: Long){
+        viewModelScope.launch {
+            useCases.getExerciseByIdUseCase(id).collect { exercise ->
+                _selectedExercise.value = exercise
+                exercise?.let { exercise ->
+                    exerciseId = exercise.id
+                    exerciseName = exercise.name
+                    selectedIconName = exercise.iconResName
+                    selectedMuscleGroups.addAll(exercise.muscleGroups)
+                }
+
+            }
+        }
+    }
+
+    fun onExerciseNameChange(value: String){
+        exerciseName = value
+        nameError = null
+    }
+
+    fun onExerciseIconSelected(value: String){
+        selectedIconName = value
+    }
+
+    fun onMuscleGroupToggle(group: MuscleGroup){
+        if (group in selectedMuscleGroups)
+            selectedMuscleGroups.remove(group)
+        else
+            selectedMuscleGroups.add(group)
+    }
+
+    fun onSelectedIconName(name: String){
+        selectedIcon = try {
+            StoredIconResName.asResource(storedName = selectedIconName)
+        }catch (exception: Exception){
+            Res.drawable.compose_multiplatform
+        }
+    }
+
+    private fun validate(): Boolean {
+        var isValid = true
+
+        if (exerciseName.isBlank()){
+            nameError = Res.string.no_name_specified
+            isValid = false
+        }
+
+        return isValid
+    }
+
+    fun saveExercise(): Boolean{
+        if (!validate()){
+            return false
+        }
+        if (exerciseName.isNotBlank()){
+            val exercise = Exercise(
+                id = exerciseId ?: 0,
+                name = exerciseName,
+                iconResName = selectedIconName,
+                muscleGroups = selectedMuscleGroups.toList()
+            )
+
+            if(exerciseId == null){
+                viewModelScope.launch {
+                    useCases.insertExerciseUseCase(exercise)
+                }
+            }else{
+                viewModelScope.launch {
+                    useCases.updateExerciseUseCase(exercise)
+                }
+            }
+
+        }
+        return true
+    }
+}
