@@ -1,5 +1,7 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
+import com.android.build.gradle.internal.packaging.defaultExcludes
+import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.exclude
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -33,6 +35,12 @@ kotlin {
     }
     
     sourceSets {
+
+        commonMain{
+            kotlin.srcDir("src/commonMain/kotlin")
+            kotlin.exclude("**/placeholder/**")
+        }
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -93,6 +101,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.material3)
     debugImplementation(compose.uiTooling)
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)

@@ -23,6 +23,7 @@ kotlinxSerializationJson = "1.9.0"
 room = "2.8.3"
 sqlite = "2.6.1"
 ksp = "2.2.21-2.0.4"
+material3 = "1.4.0"
 
 [libraries]
 androidx-material-icons = { module = "org.jetbrains.compose.material:material-icons", version.ref = "materialIcons" }
@@ -51,6 +52,7 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsExtendedVersion" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
