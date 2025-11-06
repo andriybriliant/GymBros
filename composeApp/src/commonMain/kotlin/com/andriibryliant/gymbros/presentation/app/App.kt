@@ -3,15 +3,20 @@ package com.andriibryliant.gymbros.presentation.app
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.andriibryliant.gymbros.presentation.exercise.ExerciseViewModel
 import com.andriibryliant.gymbros.presentation.exercise.add_exercise.AddExerciseScreen
+import com.andriibryliant.gymbros.presentation.exercise.add_exercise.AddExerciseViewModel
 import com.andriibryliant.gymbros.presentation.exercise.choose_icon.ChooseExerciseIconScreen
 import com.andriibryliant.gymbros.presentation.exercise.exercise_detail.ExerciseDetailScreen
 import com.andriibryliant.gymbros.presentation.main.MainScreen
+import com.andriibryliant.gymbros.presentation.main.MainScreenViewModel
 import com.andriibryliant.gymbros.presentation.settings.SettingsScreen
 import com.andriibryliant.gymbros.presentation.theme.AppTheme
 import com.andriibryliant.gymbros.presentation.workout.WorkoutViewModel
@@ -38,10 +43,12 @@ fun App(){
                 ){
                     val workoutViewModel = koinViewModel<WorkoutViewModel>()
                     val exerciseViewModel = koinViewModel<ExerciseViewModel>()
+                    val mainScreenViewModel = koinViewModel<MainScreenViewModel>()
 
                     MainScreen(
                         workoutViewModel = workoutViewModel,
                         exerciseViewModel = exerciseViewModel,
+                        mainScreenViewModel = mainScreenViewModel,
                         onSettingsClick = { navController.navigate(Route.Settings) },
                         onWorkoutClick = { workout ->
                             navController.navigate(Route.WorkoutDetail(workout.id))
@@ -71,17 +78,27 @@ fun App(){
                         initialOffset
                     } }
                 ){
-                    AddWorkoutScreen()
+                    AddWorkoutScreen(
+                        onBackClick = {navController.navigateUp()}
+                    )
                 }
                 composable<Route.AddExercise>(
-                    exitTransition = { slideOutHorizontally{ initialOffset ->
+                    popExitTransition = { slideOutHorizontally{ initialOffset ->
                         initialOffset
                     } },
+                    exitTransition = { slideOutHorizontally() },
                     enterTransition = { slideInHorizontally{ initialOffset ->
                         initialOffset
-                    } }
+                    } },
+                    popEnterTransition = { slideInHorizontally() }
                 ){
-                    AddExerciseScreen()
+                    AddExerciseScreen(
+                        onChooseIconClick = { navController.navigate(Route.ChooseExerciseIcon) },
+                        onBackClick = { navController.navigateUp() },
+                        onExerciseSave = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
                 composable<Route.ExerciseDetail>(
                     exitTransition = { slideOutHorizontally{ initialOffset ->
@@ -90,8 +107,21 @@ fun App(){
                     enterTransition = { slideInHorizontally{ initialOffset ->
                         initialOffset
                     } }
-                ){
-                    ExerciseDetailScreen()
+                ){ backstack ->
+                    val detail: Route.ExerciseDetail = backstack.toRoute()
+                    val exerciseId: Long = detail.id
+                    val viewModel: AddExerciseViewModel = koinViewModel()
+
+                    LaunchedEffect(exerciseId){
+                        viewModel.onSelectExercise(exerciseId)
+                    }
+
+                    AddExerciseScreen(
+                        viewModel = viewModel,
+                        onChooseIconClick = { navController.navigate(Route.ChooseExerciseIcon) },
+                        onBackClick = { navController.navigateUp() },
+                        onExerciseSave = { navController.navigateUp() }
+                    )
                 }
                 composable<Route.ChooseExercise>(
                     exitTransition = { slideOutHorizontally{ initialOffset ->
@@ -111,7 +141,9 @@ fun App(){
                         initialOffset
                     } }
                 ){
-                    ChooseExerciseIconScreen()
+                    ChooseExerciseIconScreen(
+                        onBackClick = { navController.navigateUp() }
+                    )
                 }
                 composable<Route.Settings>(
                     exitTransition = { slideOutHorizontally{ initialOffset ->
@@ -121,9 +153,12 @@ fun App(){
                         initialOffset
                     } }
                 ){
-                    SettingsScreen()
+                    SettingsScreen(
+                        onBackClick = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
-
             }
         }
     }
