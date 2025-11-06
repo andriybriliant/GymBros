@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="filter_workouts">Фільтрувати Тренування</string>
+    <string name="settings">Налаштування</string>
+    <string name="add_workout">Додати Тренування</string>
+    <string name="add_exercise">Додати Вправу</string>
+    <string name="workouts">Тренування</string>
+    <string name="exercises">Вправи</string>
+</resources>

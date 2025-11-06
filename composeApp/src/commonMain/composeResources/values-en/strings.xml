@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="filter_workouts">Filter Workouts</string>
+    <string name="settings">Settings</string>
+    <string name="add_workout">Add Workout</string>
+    <string name="add_exercise">Add Exercise</string>
+    <string name="workouts">Workouts</string>
+    <string name="exercises">Exercises</string>
+    <string name="chest_group">Chest</string>
+    <string name="back_group">Back</string>
+    <string name="legs_group">Legs</string>
+    <string name="biceps_group">Biceps</string>
+    <string name="triceps_group">Triceps</string>
+    <string name="forearms_group">Forearms</string>
+    <string name="abs_group">Abs</string>
+    <string name="name">Name</string>
+    <string name="muscle_groups">Muscle Groups</string>
+    <string name="icon">Icon</string>
+    <string name="save">Save</string>
+    <string name="choose_icon">Choose Icon</string>
+    <string name="edit_exercise">Edit Exercise</string>
+    <string name="no_name_specified">No Name Specified</string>
+</resources>

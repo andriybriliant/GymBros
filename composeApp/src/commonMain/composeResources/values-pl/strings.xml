@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="filter_workouts">Filtruj Treningi</string>
+    <string name="settings">Ustawienia</string>
+    <string name="add_workout">Dodaj Trening</string>
+    <string name="add_exercise">Dodaj Ćwiczenie</string>
+    <string name="workouts">Treningi</string>
+    <string name="exercises">Ćwiczenia</string>
+</resources>
