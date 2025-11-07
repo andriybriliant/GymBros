@@ -3,7 +3,6 @@ package com.andriibryliant.gymbros.presentation.app
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,10 +10,9 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.andriibryliant.gymbros.presentation.exercise.ExerciseViewModel
-import com.andriibryliant.gymbros.presentation.exercise.add_exercise.AddExerciseScreen
-import com.andriibryliant.gymbros.presentation.exercise.add_exercise.AddExerciseViewModel
-import com.andriibryliant.gymbros.presentation.exercise.choose_icon.ChooseExerciseIconScreen
 import com.andriibryliant.gymbros.presentation.exercise.exercise_detail.ExerciseDetailScreen
+import com.andriibryliant.gymbros.presentation.exercise.exercise_detail.ExerciseDetailViewModel
+import com.andriibryliant.gymbros.presentation.exercise.choose_icon.ChooseExerciseIconScreen
 import com.andriibryliant.gymbros.presentation.main.MainScreen
 import com.andriibryliant.gymbros.presentation.main.MainScreenViewModel
 import com.andriibryliant.gymbros.presentation.settings.SettingsScreen
@@ -92,7 +90,7 @@ fun App(){
                     } },
                     popEnterTransition = { slideInHorizontally() }
                 ){
-                    AddExerciseScreen(
+                    ExerciseDetailScreen(
                         onChooseIconClick = { navController.navigate(Route.ChooseExerciseIcon) },
                         onBackClick = { navController.navigateUp() },
                         onExerciseSave = {
@@ -110,13 +108,13 @@ fun App(){
                 ){ backstack ->
                     val detail: Route.ExerciseDetail = backstack.toRoute()
                     val exerciseId: Long = detail.id
-                    val viewModel: AddExerciseViewModel = koinViewModel()
+                    val viewModel: ExerciseDetailViewModel = koinViewModel()
 
                     LaunchedEffect(exerciseId){
                         viewModel.onSelectExercise(exerciseId)
                     }
 
-                    AddExerciseScreen(
+                    ExerciseDetailScreen(
                         viewModel = viewModel,
                         onChooseIconClick = { navController.navigate(Route.ChooseExerciseIcon) },
                         onBackClick = { navController.navigateUp() },

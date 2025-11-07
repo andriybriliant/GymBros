@@ -29,7 +29,7 @@ import com.andriibryliant.gymbros.domain.usecase.workout.InsertWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.UpdateSetUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.WorkoutUseCases
 import com.andriibryliant.gymbros.presentation.exercise.ExerciseViewModel
-import com.andriibryliant.gymbros.presentation.exercise.add_exercise.AddExerciseViewModel
+import com.andriibryliant.gymbros.presentation.exercise.exercise_detail.ExerciseDetailViewModel
 import com.andriibryliant.gymbros.presentation.main.MainScreenViewModel
 import com.andriibryliant.gymbros.presentation.workout.WorkoutViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -98,5 +98,5 @@ val appModule = module {
     viewModelOf(::WorkoutViewModel)
     viewModelOf(::ExerciseViewModel)
     viewModelOf(::MainScreenViewModel)
-    viewModelOf(::AddExerciseViewModel)
+    viewModelOf(::ExerciseDetailViewModel)
 }

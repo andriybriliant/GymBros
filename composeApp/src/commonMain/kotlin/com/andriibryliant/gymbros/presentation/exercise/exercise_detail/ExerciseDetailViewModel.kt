@@ -1,4 +1,4 @@
-package com.andriibryliant.gymbros.presentation.exercise.add_exercise
+package com.andriibryliant.gymbros.presentation.exercise.exercise_detail
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -18,13 +18,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
-import kotlin.collections.emptyList
 
-class AddExerciseViewModel(
+class ExerciseDetailViewModel(
     private val useCases: ExerciseUseCases
 ) : ViewModel(){
 
@@ -76,8 +73,13 @@ class AddExerciseViewModel(
         nameError = null
     }
 
-    fun onExerciseIconSelected(value: String){
-        selectedIconName = value
+    fun onExerciseIconSelected(name: String){
+        selectedIconName = name
+        selectedIcon = try {
+            StoredIconResName.asResource(storedName = selectedIconName)
+        }catch (exception: Exception){
+            Res.drawable.compose_multiplatform
+        }
     }
 
     fun onMuscleGroupToggle(group: MuscleGroup){
@@ -85,14 +87,6 @@ class AddExerciseViewModel(
             selectedMuscleGroups.remove(group)
         else
             selectedMuscleGroups.add(group)
-    }
-
-    fun onSelectedIconName(name: String){
-        selectedIcon = try {
-            StoredIconResName.asResource(storedName = selectedIconName)
-        }catch (exception: Exception){
-            Res.drawable.compose_multiplatform
-        }
     }
 
     private fun validate(): Boolean {
