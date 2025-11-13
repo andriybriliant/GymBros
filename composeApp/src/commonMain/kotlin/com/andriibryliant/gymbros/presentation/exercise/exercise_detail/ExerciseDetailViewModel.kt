@@ -43,7 +43,7 @@ class ExerciseDetailViewModel(
     var nameError by mutableStateOf<StringResource?>(null)
         private set
 
-    private var selectedIconName by mutableStateOf("c")
+    private var selectedIconName by mutableStateOf("")
 
     @OptIn(InternalResourceApi::class)
     var selectedIcon by mutableStateOf(Res.drawable.compose_multiplatform)
@@ -124,5 +124,11 @@ class ExerciseDetailViewModel(
 
         }
         return true
+    }
+
+    fun onDeleteExercise(){
+        viewModelScope.launch {
+            useCases.deleteExerciseUseCase(selectedExercise.value!!)
+        }
     }
 }

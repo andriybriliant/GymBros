@@ -1,8 +1,10 @@
 package com.andriibryliant.gymbros.presentation.exercise.exercise_detail
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,12 +14,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +34,7 @@ import com.andriibryliant.gymbros.domain.model.StoredMuscleGroupString
 import com.andriibryliant.gymbros.presentation.main.components.DefaultTopBar
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.add_exercise
+import gymbros.composeapp.generated.resources.delete
 import gymbros.composeapp.generated.resources.edit_exercise
 import gymbros.composeapp.generated.resources.icon
 import gymbros.composeapp.generated.resources.muscle_groups
@@ -65,19 +70,43 @@ fun ExerciseDetailScreen(
         },
         bottomBar = {
             Box {
-                Button(
-                    onClick = {
-                        if (viewModel.saveExercise()){
-                            onExerciseSave()
+                Row {
+                    if(viewModel.selectedExercise.value != null){
+                        OutlinedButton(
+                            onClick = {
+                                viewModel.onDeleteExercise()
+                                onBackClick()
+                            },
+                            modifier = Modifier
+                                .padding(15.dp)
+                                .weight(1f)
+                                .height(56.dp),
+                            shape = RoundedCornerShape(8.dp),
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.errorContainer
+                            ),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = MaterialTheme.colorScheme.errorContainer
+                            )
+                        ){
+                            Text(stringResource(Res.string.delete))
                         }
-                    },
-                    modifier = Modifier
-                        .padding(15.dp)
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(8.dp)
-                ){
-                    Text(stringResource(Res.string.save))
+                    }
+                    Button(
+                        onClick = {
+                            if (viewModel.saveExercise()) {
+                                onExerciseSave()
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .weight(1f)
+                            .height(56.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(stringResource(Res.string.save))
+                    }
                 }
             }
         },
