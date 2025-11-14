@@ -17,14 +17,17 @@ import com.andriibryliant.gymbros.domain.usecase.exercise.GetExerciseByIdUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.GetMuscleGroupsUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.InsertExerciseUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.UpdateExerciseUseCase
+import com.andriibryliant.gymbros.domain.usecase.workout.DeleteExerciseForWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.DeleteSetUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.DeleteWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetAllWorkoutsUseCase
+import com.andriibryliant.gymbros.domain.usecase.workout.GetExerciseForWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetSetsForExerciseUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutByIdUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutsByDateRangeUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.GetWorkoutsByDateUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.InsertSetUseCase
+import com.andriibryliant.gymbros.domain.usecase.workout.InsertWorkoutExerciseUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.InsertWorkoutUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.UpdateSetUseCase
 import com.andriibryliant.gymbros.domain.usecase.workout.WorkoutUseCases
@@ -32,6 +35,7 @@ import com.andriibryliant.gymbros.presentation.exercise.ExerciseViewModel
 import com.andriibryliant.gymbros.presentation.exercise.exercise_detail.ExerciseDetailViewModel
 import com.andriibryliant.gymbros.presentation.main.MainScreenViewModel
 import com.andriibryliant.gymbros.presentation.workout.WorkoutViewModel
+import com.andriibryliant.gymbros.presentation.workout.add_workout.WorkoutDetailViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -76,10 +80,13 @@ val appModule = module {
             getAllWorkoutsUseCase = GetAllWorkoutsUseCase(get()),
             getWorkoutByIdUseCase = GetWorkoutByIdUseCase(get()),
             insertWorkoutUseCase = InsertWorkoutUseCase(get()),
+            getExerciseForWorkoutUseCase = GetExerciseForWorkoutUseCase(get()),
             insertSetUseCase = InsertSetUseCase(get()),
+            insertWorkoutExerciseUseCase = InsertWorkoutExerciseUseCase(get()),
             updateSetUseCase = UpdateSetUseCase(get()),
             getSetsForExerciseUseCase = GetSetsForExerciseUseCase(get()),
             deleteWorkoutUseCase = DeleteWorkoutUseCase(get()),
+            deleteExerciseForWorkoutUseCase = DeleteExerciseForWorkoutUseCase(get()),
             deleteSetUseCase = DeleteSetUseCase(get())
         )
     }
@@ -99,4 +106,5 @@ val appModule = module {
     viewModelOf(::ExerciseViewModel)
     viewModelOf(::MainScreenViewModel)
     viewModelOf(::ExerciseDetailViewModel)
+    viewModelOf(::WorkoutDetailViewModel)
 }

@@ -6,7 +6,7 @@ import com.andriibryliant.gymbros.domain.repository.WorkoutRepository
 class InsertWorkoutUseCase(
     private val repository: WorkoutRepository
 ) {
-    suspend operator fun invoke(workout: Workout){
-        repository.insertWorkout(workout)
+    suspend operator fun invoke(workout: Workout): Long{
+        return repository.insertWorkout(workout)
     }
 }

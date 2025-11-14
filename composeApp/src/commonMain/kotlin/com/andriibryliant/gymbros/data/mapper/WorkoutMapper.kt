@@ -3,6 +3,7 @@ package com.andriibryliant.gymbros.data.mapper
 import com.andriibryliant.gymbros.data.local.entity.SetEntity
 import com.andriibryliant.gymbros.data.local.entity.WorkoutEntity
 import com.andriibryliant.gymbros.data.local.entity.WorkoutExerciseEntity
+import com.andriibryliant.gymbros.data.local.relation.WorkoutExerciseWithExerciseAndSets
 import com.andriibryliant.gymbros.data.local.relation.WorkoutWithExercises
 import com.andriibryliant.gymbros.domain.model.Set
 import com.andriibryliant.gymbros.domain.model.Workout
@@ -74,6 +75,20 @@ fun Workout.toSetEntities(): List<SetEntity>{
 
     return sets
 }
+
+fun WorkoutExerciseWithExerciseAndSets.toDomain(): WorkoutExercise = WorkoutExercise(
+    id = workoutExercise.workoutExerciseId,
+    workoutId = workoutExercise.workoutId,
+    exercise = exercise.toDomain(),
+    orderInWorkout = workoutExercise.orderInWorkout
+)
+
+fun WorkoutExercise.toEntity(): WorkoutExerciseEntity = WorkoutExerciseEntity(
+    workoutExerciseId = id,
+    workoutId = workoutId,
+    exerciseId = exercise.id,
+    orderInWorkout = orderInWorkout
+)
 
 fun Set.toEntity() = SetEntity(
     setId = id,
