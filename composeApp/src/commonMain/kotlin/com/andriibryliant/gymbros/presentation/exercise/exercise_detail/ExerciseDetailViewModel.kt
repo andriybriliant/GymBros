@@ -13,11 +13,15 @@ import com.andriibryliant.gymbros.domain.usecase.exercise.ExerciseUseCases
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.compose_multiplatform
 import gymbros.composeapp.generated.resources.no_name_specified
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.StringResource
 
@@ -25,7 +29,9 @@ class ExerciseDetailViewModel(
     private val useCases: ExerciseUseCases
 ) : ViewModel(){
 
-    private val _muscleGroups = useCases.getMuscleGroupsUseCase().stateIn(
+    private val _muscleGroups = useCases.getMuscleGroupsUseCase()
+        .flowOn(Dispatchers.IO)
+        .stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
@@ -54,7 +60,7 @@ class ExerciseDetailViewModel(
 
 
     fun onSelectExercise(id: Long){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCases.getExerciseByIdUseCase(id).collect { exercise ->
                 _selectedExercise.value = exercise
                 exercise?.let { exercise ->
@@ -113,11 +119,11 @@ class ExerciseDetailViewModel(
             )
 
             if(exerciseId == null){
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     useCases.insertExerciseUseCase(exercise)
                 }
             }else{
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     useCases.updateExerciseUseCase(exercise)
                 }
             }
@@ -127,7 +133,7 @@ class ExerciseDetailViewModel(
     }
 
     fun onDeleteExercise(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCases.deleteExerciseUseCase(selectedExercise.value!!)
         }
     }

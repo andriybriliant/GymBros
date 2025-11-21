@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.andriibryliant.gymbros.domain.model.Workout
 import com.andriibryliant.gymbros.presentation.workout.WorkoutViewModel
 
@@ -38,7 +39,7 @@ fun WorkoutListScreen(
         LazyColumn(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(15.dp)
+                .padding(16.dp)
                 .clip(RoundedCornerShape(5.dp)),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
@@ -58,9 +59,11 @@ fun WorkoutListScreen(
                     },
                     modifier = Modifier
                         .clip(RoundedCornerShape(5.dp))
-                        .clickable{
-                            onWorkoutClick(workout)
-                        }
+                        .clickable(
+                            onClick = dropUnlessResumed {
+                                onWorkoutClick(workout)
+                            }
+                        )
                 )
             }
         }

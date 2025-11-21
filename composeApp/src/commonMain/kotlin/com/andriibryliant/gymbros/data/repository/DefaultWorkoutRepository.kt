@@ -42,6 +42,12 @@ class DefaultWorkoutRepository(
         }
     }
 
+    override fun getWorkoutExerciseById(id: Long): Flow<WorkoutExercise?> {
+        return db.workoutDao.getWorkoutExerciseById(id).map { exercise ->
+            exercise.toDomain()
+        }
+    }
+
     override suspend fun insertWorkout(workout: Workout): Long {
         return db.workoutDao.insertFullWorkout(workout,
             workout.toWorkoutExercisesEntities(),
@@ -59,6 +65,10 @@ class DefaultWorkoutRepository(
 
     override suspend fun updateSet(set: Set) {
         db.workoutDao.updateSet(set.toEntity())
+    }
+
+    override suspend fun updateWorkoutExercise(exercise: WorkoutExercise) {
+        db.workoutDao.updateWorkoutExercise(exercise.toEntity())
     }
 
     override fun getExerciseForWorkout(workoutId: Long): Flow<List<WorkoutExercise>> {

@@ -18,9 +18,10 @@ import com.andriibryliant.gymbros.presentation.main.MainScreenViewModel
 import com.andriibryliant.gymbros.presentation.settings.SettingsScreen
 import com.andriibryliant.gymbros.presentation.theme.AppTheme
 import com.andriibryliant.gymbros.presentation.workout.WorkoutViewModel
-import com.andriibryliant.gymbros.presentation.workout.add_workout.AddWorkoutScreen
-import com.andriibryliant.gymbros.presentation.workout.choose_exercise.ChooseExerciseScreen
 import com.andriibryliant.gymbros.presentation.workout.workout_detail.WorkoutDetailScreen
+import com.andriibryliant.gymbros.presentation.workout.workout_detail.WorkoutDetailViewModel
+import com.andriibryliant.gymbros.presentation.workout.choose_exercise.ChooseExerciseScreen
+import com.andriibryliant.gymbros.presentation.workout.workout_detail.exercise_bottom_sheet.ExerciseBottomSheetViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -59,26 +60,66 @@ fun App(){
                     )
                 }
                 composable<Route.WorkoutDetail>(
-                    exitTransition = { slideOutHorizontally{ initialOffset ->
+                    popExitTransition = { slideOutHorizontally{ initialOffset ->
                         initialOffset
                     } },
+                    exitTransition = { slideOutHorizontally() },
                     enterTransition = { slideInHorizontally{ initialOffset ->
                         initialOffset
-                    } }
-                ){
-                    WorkoutDetailScreen()
+                    } },
+                    popEnterTransition = { slideInHorizontally() }
+                ){ backstack ->
+                    val detail: Route.WorkoutDetail = backstack.toRoute()
+                    val workoutId: Long = detail.id
+
+                    val viewModel = koinViewModel<WorkoutDetailViewModel>()
+                    val bottomSheetViewModel = koinViewModel<ExerciseBottomSheetViewModel>()
+
+                    LaunchedEffect(workoutId){
+                        viewModel.onSelectWorkout(workoutId)
+                    }
+
+                    val savedStateHandle = navController.currentBackStackEntry
+                        ?.savedStateHandle
+
+                    LaunchedEffect(true) {
+                        savedStateHandle?.getStateFlow<Long?>("selectedExerciseId", null)
+                            ?.collect { id ->
+                                if (id != null) {
+                                    viewModel.onAddExercise(id)
+                                    savedStateHandle["selectedExerciseId"] = null
+                                }
+                            }
+                    }
+
+                    WorkoutDetailScreen(
+                        viewModel = viewModel,
+                        bottomSheetViewModel = bottomSheetViewModel,
+                        onBackClick = { navController.navigateUp() },
+                        onAddExerciseClick = { navController.navigate(Route.ChooseExercise(workoutId)) }
+                    )
                 }
                 composable<Route.AddWorkout>(
-                    exitTransition = { slideOutHorizontally{ initialOffset ->
+                    popExitTransition = { slideOutHorizontally{ initialOffset ->
                         initialOffset
                     } },
+                    exitTransition = { slideOutHorizontally() },
                     enterTransition = { slideInHorizontally{ initialOffset ->
                         initialOffset
-                    } }
+                    } },
+                    popEnterTransition = { slideInHorizontally() }
                 ){
-                    AddWorkoutScreen(
-                        onBackClick = {navController.navigateUp()}
-                    )
+//                    val viewModel = koinViewModel<WorkoutDetailViewModel>()
+//
+//                    LaunchedEffect(true){
+//                        viewModel.onAddWorkout()
+//                    }
+//
+//                    WorkoutDetailScreen(
+//                        viewModel = viewModel,
+//                        onBackClick = { navController.navigateUp() },
+//                        onAddExerciseClick = { navController.navigate(Route.ChooseExercise(viewModel.workoutId)) }
+//                    )
                 }
                 composable<Route.AddExercise>(
                     popExitTransition = { slideOutHorizontally{ initialOffset ->
@@ -99,12 +140,14 @@ fun App(){
                     )
                 }
                 composable<Route.ExerciseDetail>(
-                    exitTransition = { slideOutHorizontally{ initialOffset ->
+                    popExitTransition = { slideOutHorizontally{ initialOffset ->
                         initialOffset
                     } },
+                    exitTransition = { slideOutHorizontally() },
                     enterTransition = { slideInHorizontally{ initialOffset ->
                         initialOffset
-                    } }
+                    } },
+                    popEnterTransition = { slideInHorizontally() }
                 ){ backstack ->
                     val detail: Route.ExerciseDetail = backstack.toRoute()
                     val exerciseId: Long = detail.id
@@ -129,7 +172,16 @@ fun App(){
                         initialOffset
                     } }
                 ){
-                    ChooseExerciseScreen()
+                    ChooseExerciseScreen(
+                        onBackClick = { navController.popBackStack() },
+                        onExerciseClick = { exercise ->
+                            navController
+                                .previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("selectedExerciseId", exercise.id)
+                            navController.navigateUp()
+                        }
+                    )
                 }
                 composable<Route.ChooseExerciseIcon>(
                     exitTransition = { slideOutHorizontally{ initialOffset ->

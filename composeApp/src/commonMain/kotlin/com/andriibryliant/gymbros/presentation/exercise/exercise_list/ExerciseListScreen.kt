@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.andriibryliant.gymbros.domain.model.Exercise
 import com.andriibryliant.gymbros.domain.model.StoredIconResName
 import com.andriibryliant.gymbros.domain.model.StoredMuscleGroupString
@@ -46,7 +47,7 @@ fun ExerciseListScreen(
         LazyColumn(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(15.dp)
+                .padding(16.dp)
                 .clip(RoundedCornerShape(5.dp)),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
@@ -75,9 +76,9 @@ fun ExerciseListScreen(
                     },
                     modifier = Modifier
                         .clip(RoundedCornerShape(5.dp))
-                        .clickable{
+                        .clickable(onClick = dropUnlessResumed {
                             onExerciseClick(exercise)
-                        }
+                        })
                 )
             }
         }

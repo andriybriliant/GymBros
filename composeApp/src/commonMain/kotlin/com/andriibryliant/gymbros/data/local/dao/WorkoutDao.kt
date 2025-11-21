@@ -58,7 +58,7 @@ interface WorkoutDao {
 
             workoutSets.forEach { set ->
                 val setId = if(set.setId == 0L) insertSet(set.copy(exerciseId = exerciseId)) else{
-                    updateSet(set.copy(exerciseId = exerciseId))
+                    updateSet(set)
                     set.setId
                 }
             }
@@ -73,6 +73,10 @@ interface WorkoutDao {
     @Transaction
     @Query("SELECT * FROM workouts WHERE workoutId = :id")
     fun getWorkoutById(id: Long): Flow<WorkoutWithExercises?>
+
+    @Transaction
+    @Query("SELECT * FROM workout_exercises WHERE workoutExerciseId = :id")
+    fun getWorkoutExerciseById(id: Long): Flow<WorkoutExerciseWithExerciseAndSets>
 
     @Transaction
     @Query("SELECT * FROM workouts WHERE date = :date ")

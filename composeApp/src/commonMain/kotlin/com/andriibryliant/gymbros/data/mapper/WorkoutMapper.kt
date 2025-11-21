@@ -79,6 +79,9 @@ fun Workout.toSetEntities(): List<SetEntity>{
 fun WorkoutExerciseWithExerciseAndSets.toDomain(): WorkoutExercise = WorkoutExercise(
     id = workoutExercise.workoutExerciseId,
     workoutId = workoutExercise.workoutId,
+    sets = sets.map { setEntity ->
+        setEntity.toDomain()
+    },
     exercise = exercise.toDomain(),
     orderInWorkout = workoutExercise.orderInWorkout
 )

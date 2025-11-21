@@ -17,7 +17,7 @@ sealed interface Route {
     data object AddWorkout: Route
 
     @Serializable
-    data object ChooseExercise: Route
+    data class ChooseExercise(val id: Long): Route
 
     @Serializable
     data class ExerciseDetail(val id: Long): Route

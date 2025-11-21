@@ -78,16 +78,16 @@ fun ExerciseDetailScreen(
                                 onBackClick()
                             },
                             modifier = Modifier
-                                .padding(15.dp)
+                                .padding(16.dp)
                                 .weight(1f)
                                 .height(56.dp),
                             shape = RoundedCornerShape(8.dp),
                             border = BorderStroke(
                                 width = 1.dp,
-                                color = MaterialTheme.colorScheme.errorContainer
+                                color = MaterialTheme.colorScheme.error
                             ),
                             colors = ButtonDefaults.outlinedButtonColors(
-                                contentColor = MaterialTheme.colorScheme.errorContainer
+                                contentColor = MaterialTheme.colorScheme.error
                             )
                         ){
                             Text(stringResource(Res.string.delete))
@@ -100,7 +100,7 @@ fun ExerciseDetailScreen(
                             }
                         },
                         modifier = Modifier
-                            .padding(15.dp)
+                            .padding(16.dp)
                             .weight(1f)
                             .height(56.dp),
                         shape = RoundedCornerShape(8.dp)
