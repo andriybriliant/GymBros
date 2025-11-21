@@ -76,7 +76,7 @@ fun App(){
                     val bottomSheetViewModel = koinViewModel<ExerciseBottomSheetViewModel>()
 
                     LaunchedEffect(workoutId){
-                        viewModel.onSelectWorkout(workoutId)
+                        viewModel.onEditWorkout(workoutId)
                     }
 
                     val savedStateHandle = navController.currentBackStackEntry
@@ -96,7 +96,7 @@ fun App(){
                         viewModel = viewModel,
                         bottomSheetViewModel = bottomSheetViewModel,
                         onBackClick = { navController.navigateUp() },
-                        onAddExerciseClick = { navController.navigate(Route.ChooseExercise(workoutId)) }
+                        onAddExerciseClick = { navController.navigate(Route.ChooseExercise) }
                     )
                 }
                 composable<Route.AddWorkout>(
@@ -109,17 +109,32 @@ fun App(){
                     } },
                     popEnterTransition = { slideInHorizontally() }
                 ){
-//                    val viewModel = koinViewModel<WorkoutDetailViewModel>()
-//
-//                    LaunchedEffect(true){
-//                        viewModel.onAddWorkout()
-//                    }
-//
-//                    WorkoutDetailScreen(
-//                        viewModel = viewModel,
-//                        onBackClick = { navController.navigateUp() },
-//                        onAddExerciseClick = { navController.navigate(Route.ChooseExercise(viewModel.workoutId)) }
-//                    )
+                    val viewModel = koinViewModel<WorkoutDetailViewModel>()
+                    val bottomSheetViewModel = koinViewModel<ExerciseBottomSheetViewModel>()
+
+                    LaunchedEffect(true){
+                        viewModel.onAddWorkout()
+                    }
+
+                    val savedStateHandle = navController.currentBackStackEntry
+                        ?.savedStateHandle
+
+                    LaunchedEffect(true) {
+                        savedStateHandle?.getStateFlow<Long?>("selectedExerciseId", null)
+                            ?.collect { id ->
+                                if (id != null) {
+                                    viewModel.onAddExercise(id)
+                                    savedStateHandle["selectedExerciseId"] = null
+                                }
+                            }
+                    }
+
+                    WorkoutDetailScreen(
+                        viewModel = viewModel,
+                        bottomSheetViewModel = bottomSheetViewModel,
+                        onBackClick = { navController.navigateUp() },
+                        onAddExerciseClick = { navController.navigate(Route.ChooseExercise) }
+                    )
                 }
                 composable<Route.AddExercise>(
                     popExitTransition = { slideOutHorizontally{ initialOffset ->

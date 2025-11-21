@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,10 +54,13 @@ import com.andriibryliant.gymbros.presentation.workout.workout_detail.exercise_b
 import com.andriibryliant.gymbros.presentation.workout.workout_detail.exercise_bottom_sheet.ExerciseBottomSheetViewModel
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.add_exercise
+import gymbros.composeapp.generated.resources.add_workout
 import gymbros.composeapp.generated.resources.delete
 import gymbros.composeapp.generated.resources.edit_workout
 import gymbros.composeapp.generated.resources.name
+import gymbros.composeapp.generated.resources.save
 import gymbros.composeapp.generated.resources.sets
+import gymbros.composeapp.generated.resources.workout
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -74,23 +78,41 @@ fun WorkoutDetailScreen(
     val exercises by viewModel.exercises.collectAsState()
     val state = viewModel.state
     val deleteDialogState = viewModel.deleteDialogState
-    val showSheet = state == WorkoutDetailState.EditExercise
     val selectedExerciseId by viewModel.selectedExerciseId.collectAsState()
+    val showSheet = selectedExerciseId != null
     var showDateDialog by remember { mutableStateOf(false) }
     val workoutDate = viewModel.workoutDate
 
-    BackHandler(true) {
-        viewModel.onSaveWorkout()
+    if(state == WorkoutDetailState.WorkoutDeleted){
         onBackClick()
+    }
+
+    BackHandler(true) {
+        if(state == WorkoutDetailState.EditWorkout){
+            viewModel.onSaveWorkout()
+            onBackClick()
+        }else if(state == WorkoutDetailState.AddWorkout){
+            viewModel.setDialogState(DeleteDialogState.CancelAddWorkout)
+        }
     }
 
     Scaffold(
         topBar = {
             DefaultTopBar(
-                title = stringResource(Res.string.edit_workout),
+                title = stringResource(
+                    when(state){
+                        WorkoutDetailState.EditWorkout -> Res.string.edit_workout
+                        WorkoutDetailState.AddWorkout -> Res.string.add_workout
+                        else -> Res.string.workout
+                    }
+                ),
                 onBackClick = {
-                    if (viewModel.onSaveWorkout()){
-                        onBackClick()
+                    if(state == WorkoutDetailState.AddWorkout){
+                        viewModel.setDialogState(DeleteDialogState.CancelAddWorkout)
+                    }else{
+                        if (viewModel.onSaveWorkout()){
+                            onBackClick()
+                        }
                     }
                 },
                 backgroundColor = MaterialTheme.colorScheme.surfaceContainer
@@ -98,22 +120,39 @@ fun WorkoutDetailScreen(
         },
         bottomBar = {
             Box{
-                OutlinedButton(
-                    onClick = {
-                        viewModel.setDialogState(DeleteDialogState.DeleteWorkout)
-                    },
-                    colors = ButtonDefaults.outlinedButtonColors(
+                if(state == WorkoutDetailState.AddWorkout){
+                    Button(
+                        onClick = {
+                            if (viewModel.onSaveWorkout()) {
+                                onBackClick()
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .height(56.dp),
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(stringResource(Res.string.save))
+                    }
+                }else if (state == WorkoutDetailState.EditWorkout){
+                    OutlinedButton(
+                        onClick = {
+                            viewModel.setDialogState(DeleteDialogState.DeleteWorkout)
+                        },
+                        colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.error
                         ),
-                    border = BorderStroke(
-                        2.dp, MaterialTheme.colorScheme.error
-                    ),
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .height(56.dp),
-                ){
-                    Text(stringResource(Res.string.delete))
+                        border = BorderStroke(
+                            2.dp, MaterialTheme.colorScheme.error
+                        ),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .height(56.dp),
+                    ){
+                        Text(stringResource(Res.string.delete))
+                    }
                 }
             }
         },
@@ -205,7 +244,6 @@ fun WorkoutDetailScreen(
                             .clip(RoundedCornerShape(5.dp))
                             .clickable {
                                 viewModel.onSelectExercise(exercise.id)
-                                viewModel.selectState(WorkoutDetailState.EditExercise)
                             }
                     )
                 }
@@ -223,7 +261,7 @@ fun WorkoutDetailScreen(
                                 RoundedCornerShape(10.dp))
                             .clip(RoundedCornerShape(10.dp))
                             .clickable{
-                                viewModel.selectState(WorkoutDetailState.AddExercise)
+                                viewModel.onSaveWorkout()
                                 onAddExerciseClick()
                             },
                         colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
@@ -236,10 +274,12 @@ fun WorkoutDetailScreen(
                 viewModel = bottomSheetViewModel,
                 onDismiss = {
                     viewModel.clearSelectedExercise()
-                    viewModel.selectState(WorkoutDetailState.AddExercise)
                 },
                 exerciseId = selectedExerciseId?: 0,
-                onExerciseClick = onAddExerciseClick
+                onExerciseClick = {
+                    viewModel.onSaveWorkout()
+                    onAddExerciseClick()
+                }
             )
         }
         if(deleteDialogState != null){
@@ -249,6 +289,7 @@ fun WorkoutDetailScreen(
                 onConfirm = {
                     when(deleteDialogState){
                         DeleteDialogState.DeleteWorkout -> viewModel.onDeleteWorkout()
+                        DeleteDialogState.CancelAddWorkout -> viewModel.onDeleteWorkout()
                         is DeleteDialogState.DeleteWorkoutExercise -> viewModel.onDeleteExercise(deleteDialogState.exercise)
                     }
                     viewModel.clearDialogState()

@@ -42,24 +42,25 @@ interface WorkoutDao {
     @Transaction
     suspend fun insertFullWorkout(
         workout: Workout,
-        workoutExercises: List<WorkoutExerciseEntity>,
-        workoutSets: List<SetEntity>
+        workoutExercises: List<WorkoutExercise>,
     ): Long{
         val workoutId = if(workout.id == 0L) insertWorkout(workout.toEntity()) else{
             updateWorkout(workout.toEntity())
             workout.id
         }
 
-        workoutExercises.forEach { entity ->
+        workoutExercises.forEach { workoutExercise ->
+            val entity = workoutExercise.toEntity()
             val exerciseId = if(entity.workoutExerciseId == 0L) insertWorkoutExercise(entity.copy(workoutId = workoutId)) else {
                 updateWorkoutExercise(entity.copy(workoutId = workoutId))
                 entity.workoutExerciseId
             }
 
-            workoutSets.forEach { set ->
-                val setId = if(set.setId == 0L) insertSet(set.copy(exerciseId = exerciseId)) else{
-                    updateSet(set)
-                    set.setId
+            workoutExercise.sets.forEach { set ->
+                val setEntity = set.toEntity()
+                val setId = if(setEntity.setId == 0L) insertSet(setEntity.copy(exerciseId = exerciseId)) else{
+                    updateSet(setEntity)
+                    setEntity.setId
                 }
             }
         }

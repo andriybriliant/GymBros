@@ -50,8 +50,7 @@ class DefaultWorkoutRepository(
 
     override suspend fun insertWorkout(workout: Workout): Long {
         return db.workoutDao.insertFullWorkout(workout,
-            workout.toWorkoutExercisesEntities(),
-            workout.toSetEntities()
+            workout.exercises,
         )
     }
 

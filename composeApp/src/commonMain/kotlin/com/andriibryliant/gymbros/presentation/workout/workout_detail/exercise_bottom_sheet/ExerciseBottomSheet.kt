@@ -61,7 +61,7 @@ fun ExerciseBottomSheet(
 
     LaunchedEffect(exerciseId){
         viewModel.onSelectExercise(exerciseId)
-        viewModel.observeSets(exerciseId)
+//        viewModel.observeSets(exerciseId)
     }
 
     selectedExercise?.let { workoutExercise ->

@@ -3,7 +3,6 @@ package com.andriibryliant.gymbros.presentation.workout.workout_detail
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andriibryliant.gymbros.domain.model.Exercise
@@ -33,7 +32,6 @@ import kotlin.time.ExperimentalTime
 class WorkoutDetailViewModel(
     private val useCases: WorkoutUseCases,
     private val exerciseUseCases: ExerciseUseCases,
-    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     var workoutName by mutableStateOf("")
         private set
@@ -55,8 +53,6 @@ class WorkoutDetailViewModel(
     private val _exercises = MutableStateFlow<List<WorkoutExercise>>(emptyList())
 
     var exercises: StateFlow<List<WorkoutExercise>> = _exercises.asStateFlow()
-
-    private var _selectedExerciseToAdd by mutableStateOf<Exercise?>(null)
 
     private val _selectedExerciseId = MutableStateFlow<Long?>(null)
     val selectedExerciseId = _selectedExerciseId.asStateFlow()
@@ -85,6 +81,27 @@ class WorkoutDetailViewModel(
         workoutDate = date?: Clock.System.todayIn(TimeZone.currentSystemDefault())
     }
 
+    fun onAddWorkout(){
+        state = WorkoutDetailState.AddWorkout
+        if(selectedWorkout != null){
+            return
+        }
+        viewModelScope.launch(Dispatchers.IO){
+            val workoutId = useCases.insertWorkoutUseCase(
+                Workout(
+                    name = "New Workout",
+                    date = Clock.System.todayIn(TimeZone.currentSystemDefault())
+                )
+            )
+            onSelectWorkout(workoutId)
+        }
+    }
+
+    fun onEditWorkout(id: Long){
+        state = WorkoutDetailState.EditWorkout
+        onSelectWorkout(id)
+    }
+
     fun onSelectWorkout(id: Long){
         viewModelScope.launch(Dispatchers.IO) {
             useCases.getWorkoutByIdUseCase(id).collect { workout ->
@@ -109,29 +126,26 @@ class WorkoutDetailViewModel(
 
     fun onAddExercise(exerciseId: Long){
         viewModelScope.launch(Dispatchers.IO){
-            exerciseUseCases.getExerciseByIdUseCase(exerciseId).collect { exercise ->
-                if(state == WorkoutDetailState.AddExercise){
-                    _selectedExerciseToAdd = exercise
-                    _selectedExerciseToAdd?.let {
+            exerciseUseCases.getExerciseByIdUseCase(exerciseId).collect { exerciseToAdd ->
+                if(_selectedExerciseId.value == null){
+                    exerciseToAdd?.let {
                         useCases.insertWorkoutExerciseUseCase(
                             WorkoutExercise(
                                 workoutId = workoutId,
-                                exercise = _selectedExerciseToAdd!!,
+                                exercise = exerciseToAdd,
                                 orderInWorkout = 0
                             )
                         )
                     }
                 }else{
-                    _selectedExerciseId.value?.let {
                         useCases.getWorkoutExerciseByIdUseCase(_selectedExerciseId.value!!).collect { workoutExercise ->
-                            exercise?.let { exercise ->
+                            exerciseToAdd?.let {
                                 useCases.updateWorkoutExerciseUseCase(
-                                    workoutExercise!!.copy(exercise = exercise)
+                                    workoutExercise!!.copy(exercise = exerciseToAdd)
                                 )
                                 coroutineContext.cancel()
                             }
                         }
-                    }
                 }
             }
         }
@@ -185,6 +199,7 @@ class WorkoutDetailViewModel(
     fun onDeleteWorkout(){
         viewModelScope.launch(Dispatchers.IO){
             useCases.deleteWorkoutUseCase(workoutId)
+            state = WorkoutDetailState.WorkoutDeleted
         }
     }
 }

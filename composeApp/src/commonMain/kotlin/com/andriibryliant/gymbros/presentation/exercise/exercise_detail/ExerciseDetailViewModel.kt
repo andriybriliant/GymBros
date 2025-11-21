@@ -69,7 +69,6 @@ class ExerciseDetailViewModel(
                     selectedIconName = exercise.iconResName
                     selectedMuscleGroups.addAll(exercise.muscleGroups)
                 }
-
             }
         }
     }

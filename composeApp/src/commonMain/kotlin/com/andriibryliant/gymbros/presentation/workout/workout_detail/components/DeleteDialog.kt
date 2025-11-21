@@ -12,6 +12,9 @@ import gymbros.composeapp.generated.resources.delete_exercise_prompt
 import gymbros.composeapp.generated.resources.delete_exercise_title
 import gymbros.composeapp.generated.resources.delete_workout_prompt
 import gymbros.composeapp.generated.resources.delete_workout_title
+import gymbros.composeapp.generated.resources.discard_changes_prompt
+import gymbros.composeapp.generated.resources.discard_changes_title
+import gymbros.composeapp.generated.resources.discard_confirm
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +28,13 @@ fun DeleteDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text(stringResource(Res.string.delete))
+
+                Text(stringResource(
+                    when(state){
+                        DeleteDialogState.CancelAddWorkout -> Res.string.discard_confirm
+                        else -> Res.string.delete
+                    }
+                ))
             }
         },
         dismissButton = {
@@ -34,6 +43,7 @@ fun DeleteDialog(
         title = { Text(stringResource(
             when(state){
                 DeleteDialogState.DeleteWorkout -> Res.string.delete_workout_title
+                DeleteDialogState.CancelAddWorkout -> Res.string.discard_changes_title
                 is DeleteDialogState.DeleteWorkoutExercise -> Res.string.delete_exercise_title
             }
         )) },
@@ -41,6 +51,7 @@ fun DeleteDialog(
             Text(stringResource(
                 when(state){
                     DeleteDialogState.DeleteWorkout -> Res.string.delete_workout_prompt
+                    DeleteDialogState.CancelAddWorkout -> Res.string.discard_changes_prompt
                     is DeleteDialogState.DeleteWorkoutExercise -> Res.string.delete_exercise_prompt
                 }
             ))
