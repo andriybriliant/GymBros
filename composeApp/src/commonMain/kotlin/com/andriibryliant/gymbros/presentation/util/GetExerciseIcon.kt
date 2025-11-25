@@ -3,6 +3,7 @@ package com.andriibryliant.gymbros.presentation.util
 import com.andriibryliant.gymbros.domain.model.StoredIconResName
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.compose_multiplatform
+import gymbros.composeapp.generated.resources.ic_lat_pulldown
 import org.jetbrains.compose.resources.DrawableResource
 
 abstract class GetIconResource {
@@ -11,7 +12,7 @@ abstract class GetIconResource {
             return try {
                 StoredIconResName.asResource(iconResName)
             }catch (e: Exception){
-                Res.drawable.compose_multiplatform
+                Res.drawable.ic_lat_pulldown
             }
         }
     }

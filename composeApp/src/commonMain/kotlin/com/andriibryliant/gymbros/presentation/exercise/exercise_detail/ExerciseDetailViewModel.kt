@@ -12,6 +12,7 @@ import com.andriibryliant.gymbros.domain.model.StoredIconResName
 import com.andriibryliant.gymbros.domain.usecase.exercise.ExerciseUseCases
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.compose_multiplatform
+import gymbros.composeapp.generated.resources.ic_lat_pulldown
 import gymbros.composeapp.generated.resources.no_name_specified
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.jetbrains.compose.resources.InternalResourceApi
 import org.jetbrains.compose.resources.StringResource
 
@@ -52,22 +52,26 @@ class ExerciseDetailViewModel(
     private var selectedIconName by mutableStateOf("")
 
     @OptIn(InternalResourceApi::class)
-    var selectedIcon by mutableStateOf(Res.drawable.compose_multiplatform)
+    var selectedIcon by mutableStateOf(Res.drawable.ic_lat_pulldown)
         private set
 
     var selectedMuscleGroups = mutableStateListOf<MuscleGroup>()
         private set
 
+    var isFetched by mutableStateOf(false)
 
     fun onSelectExercise(id: Long){
-        viewModelScope.launch(Dispatchers.IO) {
-            useCases.getExerciseByIdUseCase(id).collect { exercise ->
-                _selectedExercise.value = exercise
-                exercise?.let { exercise ->
-                    exerciseId = exercise.id
-                    exerciseName = exercise.name
-                    selectedIconName = exercise.iconResName
-                    selectedMuscleGroups.addAll(exercise.muscleGroups)
+        if(!isFetched){
+            viewModelScope.launch(Dispatchers.IO) {
+                useCases.getExerciseByIdUseCase(id).collect { exercise ->
+                    _selectedExercise.value = exercise
+                    exercise?.let { exercise ->
+                        exerciseId = exercise.id
+                        exerciseName = exercise.name
+                        onExerciseIconSelected(exercise.iconResName)
+                        selectedMuscleGroups.addAll(exercise.muscleGroups)
+                        isFetched = true
+                    }
                 }
             }
         }
@@ -79,11 +83,13 @@ class ExerciseDetailViewModel(
     }
 
     fun onExerciseIconSelected(name: String){
-        selectedIconName = name
-        selectedIcon = try {
-            StoredIconResName.asResource(storedName = selectedIconName)
-        }catch (exception: Exception){
-            Res.drawable.compose_multiplatform
+        viewModelScope.launch(Dispatchers.IO) {
+            selectedIconName = name
+            selectedIcon = try {
+                StoredIconResName.asResource(storedName = selectedIconName)
+            }catch (exception: Exception){
+                Res.drawable.compose_multiplatform
+            }
         }
     }
 
@@ -113,7 +119,7 @@ class ExerciseDetailViewModel(
             val exercise = Exercise(
                 id = exerciseId ?: 0,
                 name = exerciseName,
-                iconResName = selectedIconName,
+                iconResName = StoredIconResName.asString(selectedIcon),
                 muscleGroups = selectedMuscleGroups.toList()
             )
 

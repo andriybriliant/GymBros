@@ -83,11 +83,11 @@ fun App(){
                         ?.savedStateHandle
 
                     LaunchedEffect(true) {
-                        savedStateHandle?.getStateFlow<Long?>("selectedExerciseId", null)
+                        savedStateHandle?.getStateFlow<String?>("selectedExerciseId", "")
                             ?.collect { id ->
-                                if (id != null) {
-                                    viewModel.onAddExercise(id)
-                                    savedStateHandle["selectedExerciseId"] = null
+                                if (id!!.isNotBlank()) {
+                                    viewModel.onAddExercise(id.toLong())
+                                    savedStateHandle["selectedExerciseId"] = ""
                                 }
                             }
                     }
@@ -120,11 +120,11 @@ fun App(){
                         ?.savedStateHandle
 
                     LaunchedEffect(true) {
-                        savedStateHandle?.getStateFlow<Long?>("selectedExerciseId", null)
+                        savedStateHandle?.getStateFlow<String?>("selectedExerciseId", "")
                             ?.collect { id ->
-                                if (id != null) {
-                                    viewModel.onAddExercise(id)
-                                    savedStateHandle["selectedExerciseId"] = null
+                                if (id!!.isNotBlank()) {
+                                    viewModel.onAddExercise(id.toLong())
+                                    savedStateHandle["selectedExerciseId"] = ""
                                 }
                             }
                     }
@@ -146,7 +146,24 @@ fun App(){
                     } },
                     popEnterTransition = { slideInHorizontally() }
                 ){
+
+                    val viewModel: ExerciseDetailViewModel = koinViewModel()
+
+                    val savedStateHandle = navController.currentBackStackEntry
+                        ?.savedStateHandle
+
+                    LaunchedEffect(true) {
+                        savedStateHandle?.getStateFlow<String?>("selectedExerciseIcon", "")
+                            ?.collect { name ->
+                                if (name!!.isNotBlank()) {
+                                    viewModel.onExerciseIconSelected(name)
+                                    savedStateHandle["selectedExerciseIcon"] = ""
+                                }
+                            }
+                    }
+
                     ExerciseDetailScreen(
+                        viewModel = viewModel,
                         onChooseIconClick = { navController.navigate(Route.ChooseExerciseIcon) },
                         onBackClick = { navController.navigateUp() },
                         onExerciseSave = {
@@ -168,8 +185,21 @@ fun App(){
                     val exerciseId: Long = detail.id
                     val viewModel: ExerciseDetailViewModel = koinViewModel()
 
+                    val savedStateHandle = navController.currentBackStackEntry
+                        ?.savedStateHandle
+
                     LaunchedEffect(exerciseId){
                         viewModel.onSelectExercise(exerciseId)
+                    }
+
+                    LaunchedEffect(true) {
+                        savedStateHandle?.getStateFlow<String?>("selectedExerciseIcon", "")
+                            ?.collect { name ->
+                                if (name!!.isNotBlank()) {
+                                    viewModel.onExerciseIconSelected(name)
+                                    savedStateHandle["selectedExerciseIcon"] = ""
+                                }
+                            }
                     }
 
                     ExerciseDetailScreen(
@@ -193,7 +223,7 @@ fun App(){
                             navController
                                 .previousBackStackEntry
                                 ?.savedStateHandle
-                                ?.set("selectedExerciseId", exercise.id)
+                                ?.set("selectedExerciseId", exercise.id.toString())
                             navController.navigateUp()
                         }
                     )
@@ -207,6 +237,13 @@ fun App(){
                     } }
                 ){
                     ChooseExerciseIconScreen(
+                        onIconClicked = { name ->
+                            navController
+                                .previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set("selectedExerciseIcon", name)
+                            navController.navigateUp()
+                        },
                         onBackClick = { navController.navigateUp() }
                     )
                 }
