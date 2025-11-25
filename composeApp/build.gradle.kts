@@ -61,6 +61,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
             implementation(libs.jetbrains.compose.navigation)
+            implementation("org.jetbrains.compose.ui:ui-backhandler:1.9.3")
             implementation(libs.material.icons.extended)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)

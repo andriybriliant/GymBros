@@ -1,6 +1,10 @@
 package com.andriibryliant.gymbros.presentation.main
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideIn
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
@@ -28,6 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andriibryliant.gymbros.domain.model.Exercise
@@ -42,6 +52,7 @@ import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.exercises
 import gymbros.composeapp.generated.resources.filter_workouts
 import gymbros.composeapp.generated.resources.workouts
+import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -57,6 +68,8 @@ fun MainScreen(
 ){
     var showDatePicker by remember { mutableStateOf(false) }
     val selectedTab by mainScreenViewModel.selectedTabIndex.collectAsStateWithLifecycle()
+    val startDate = workoutViewModel.startDateString
+    val endDate = workoutViewModel.endDateString
 
     Scaffold(
         topBar = {
@@ -134,10 +147,49 @@ fun MainScreen(
             }
 
             if(selectedTab == 0){
-                WorkoutListScreen(
-                    viewModel = workoutViewModel,
-                    onWorkoutClick = onWorkoutClick
-                )
+                Column(
+                    modifier = Modifier
+                        .background(color = MaterialTheme.colorScheme.surfaceVariant)
+                ){
+                    AnimatedVisibility(
+                        visible = (startDate.isNotBlank()),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                    ){
+                        FilterChip(
+                            selected = true,
+                            onClick = {},
+                            label = {
+                                if(endDate.isBlank()){
+                                    Text(startDate)
+                                }else{
+                                    Text("$startDate - $endDate",
+                                        textAlign = TextAlign.Center)
+                                }
+                            },
+                            trailingIcon = {
+                                Icon(
+                                    Icons.Default.Close,
+                                    null,
+                                    modifier = Modifier
+                                        .size(16.dp)
+                                        .clickable{
+                                            workoutViewModel.observeWorkouts()
+                                        }
+                                )
+                            },
+                            colors = FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                                selectedTrailingIconColor = MaterialTheme.colorScheme.onPrimary
+                            )
+                        )
+                    }
+                    WorkoutListScreen(
+                        viewModel = workoutViewModel,
+                        onWorkoutClick = onWorkoutClick
+                    )
+                }
             }else if(selectedTab == 1){
                 ExerciseListScreen(
                     viewModel = exerciseViewModel,
@@ -152,6 +204,7 @@ fun MainScreen(
         DateRangePickerDialog(
             onDismiss = { showDatePicker = false },
             onConfirm = {start, end ->
+                workoutViewModel.onDateRangeSelected(start, end)
                 showDatePicker = false
             }
         )

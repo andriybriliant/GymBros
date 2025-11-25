@@ -80,11 +80,11 @@ interface WorkoutDao {
     fun getWorkoutExerciseById(id: Long): Flow<WorkoutExerciseWithExerciseAndSets>
 
     @Transaction
-    @Query("SELECT * FROM workouts WHERE date = :date ")
+    @Query("SELECT * FROM workouts WHERE date = :date ORDER BY date DESC ")
     fun getWorkoutsByDate(date: LocalDate): Flow<List<WorkoutWithExercises>>
 
     @Transaction
-    @Query("SELECT * FROM workouts WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
+    @Query("SELECT * FROM workouts WHERE date BETWEEN :startDate AND :endDate ORDER BY date DESC")
     fun getWorkoutsByDateRange(startDate: LocalDate, endDate: LocalDate): Flow<List<WorkoutWithExercises>>
 
     @Transaction

@@ -14,7 +14,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun toDate(date: String?): LocalDate?{
-        return date?.let { LocalDate.parse(it, formatter) }
+    fun toDate(date: String?): LocalDate{
+        return date?.let { LocalDate.parse(it, formatter) } ?: LocalDate(1970, 1, 1)
     }
 }
