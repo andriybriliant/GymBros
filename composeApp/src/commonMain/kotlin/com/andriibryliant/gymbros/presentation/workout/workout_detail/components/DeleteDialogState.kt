@@ -6,4 +6,5 @@ sealed interface DeleteDialogState {
     data object DeleteWorkout: DeleteDialogState
     data object CancelAddWorkout: DeleteDialogState
     data class DeleteWorkoutExercise(val exercise: WorkoutExercise): DeleteDialogState
+    data object DeleteExercise: DeleteDialogState
 }

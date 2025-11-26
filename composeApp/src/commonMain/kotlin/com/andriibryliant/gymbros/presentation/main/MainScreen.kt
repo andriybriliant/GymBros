@@ -50,6 +50,8 @@ import com.andriibryliant.gymbros.presentation.workout.WorkoutViewModel
 import com.andriibryliant.gymbros.presentation.workout.workout_list.WorkoutListScreen
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.exercises
+import gymbros.composeapp.generated.resources.filter
+import gymbros.composeapp.generated.resources.filter_exercises
 import gymbros.composeapp.generated.resources.filter_workouts
 import gymbros.composeapp.generated.resources.workouts
 import kotlinx.datetime.LocalDate
@@ -74,10 +76,16 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopBarWithFilter(
-                title = stringResource(Res.string.filter_workouts),
+                title = when(selectedTab){
+                    0 -> stringResource(Res.string.filter_workouts)
+                    1 -> stringResource(Res.string.filter_exercises)
+                    else -> stringResource(Res.string.filter)
+                },
                 onSettingsClick = onSettingsClick,
                 onFilterBarClick = {
-                    showDatePicker = true
+                    if(selectedTab == 0){
+                        showDatePicker = true
+                    }
                 }
             )
         },

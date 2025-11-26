@@ -1,6 +1,7 @@
 package com.andriibryliant.gymbros.presentation.exercise.exercise_detail
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,11 +28,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andriibryliant.gymbros.domain.model.StoredMuscleGroupString
 import com.andriibryliant.gymbros.presentation.main.components.DefaultTopBar
+import com.andriibryliant.gymbros.presentation.workout.workout_detail.components.DeleteDialog
+import com.andriibryliant.gymbros.presentation.workout.workout_detail.components.DeleteDialogState
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.add_exercise
 import gymbros.composeapp.generated.resources.delete
@@ -56,6 +62,7 @@ fun ExerciseDetailScreen(
     val muscleGroups by viewModel.muscleGroups.collectAsStateWithLifecycle()
     val selectedMuscleGroups = viewModel.selectedMuscleGroups
     val selectedIcon = viewModel.selectedIcon
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -74,8 +81,7 @@ fun ExerciseDetailScreen(
                     if(viewModel.selectedExercise.value != null){
                         OutlinedButton(
                             onClick = {
-                                viewModel.onDeleteExercise()
-                                onBackClick()
+                                showDeleteDialog = true
                             },
                             modifier = Modifier
                                 .padding(16.dp)
@@ -189,5 +195,18 @@ fun ExerciseDetailScreen(
                 }
             }
         }
+    }
+    if(showDeleteDialog){
+        DeleteDialog(
+            state = DeleteDialogState.DeleteExercise,
+            onDismiss = {
+                showDeleteDialog = false
+            },
+            onConfirm = {
+                showDeleteDialog = false
+                viewModel.onDeleteExercise()
+                onBackClick()
+            }
+        )
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.intl.Locale
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.cancel
 import gymbros.composeapp.generated.resources.delete
@@ -28,7 +29,6 @@ fun DeleteDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(onClick = onConfirm) {
-
                 Text(stringResource(
                     when(state){
                         DeleteDialogState.CancelAddWorkout -> Res.string.discard_confirm
@@ -45,6 +45,7 @@ fun DeleteDialog(
                 DeleteDialogState.DeleteWorkout -> Res.string.delete_workout_title
                 DeleteDialogState.CancelAddWorkout -> Res.string.discard_changes_title
                 is DeleteDialogState.DeleteWorkoutExercise -> Res.string.delete_exercise_title
+                DeleteDialogState.DeleteExercise -> Res.string.delete_exercise_title
             }
         )) },
         text = {
@@ -53,6 +54,7 @@ fun DeleteDialog(
                     DeleteDialogState.DeleteWorkout -> Res.string.delete_workout_prompt
                     DeleteDialogState.CancelAddWorkout -> Res.string.discard_changes_prompt
                     is DeleteDialogState.DeleteWorkoutExercise -> Res.string.delete_exercise_prompt
+                    DeleteDialogState.DeleteExercise -> Res.string.delete_exercise_prompt
                 }
             ))
         }

@@ -291,6 +291,7 @@ fun WorkoutDetailScreen(
                         DeleteDialogState.DeleteWorkout -> viewModel.onDeleteWorkout()
                         DeleteDialogState.CancelAddWorkout -> viewModel.onDeleteWorkout()
                         is DeleteDialogState.DeleteWorkoutExercise -> viewModel.onDeleteExercise(deleteDialogState.exercise)
+                        else -> {}
                     }
                     viewModel.clearDialogState()
                 }

@@ -1,5 +1,7 @@
 package com.andriibryliant.gymbros.presentation.workout.workout_list
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -64,6 +66,10 @@ fun WorkoutListScreen(
                             onClick = dropUnlessResumed {
                                 onWorkoutClick(workout)
                             }
+                        )
+                        .animateItem(
+                            fadeInSpec = tween(300, easing = LinearOutSlowInEasing),
+                            fadeOutSpec = tween(300, easing = LinearOutSlowInEasing)
                         )
                 )
             }
