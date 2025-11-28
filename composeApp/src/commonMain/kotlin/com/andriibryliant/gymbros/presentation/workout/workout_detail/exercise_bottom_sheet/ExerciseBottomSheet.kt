@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andriibryliant.gymbros.domain.model.Set
@@ -41,6 +42,7 @@ import com.andriibryliant.gymbros.presentation.workout.workout_detail.WorkoutDet
 import com.andriibryliant.gymbros.presentation.workout.workout_detail.components.EditSetDialog
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.add_set
+import gymbros.composeapp.generated.resources.edit_exercise
 import gymbros.composeapp.generated.resources.sets
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -71,14 +73,21 @@ fun ExerciseBottomSheet(
                 viewModel.clearSelectedExercise()
             },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            dragHandle = null
         ){
             LazyColumn(
                 modifier = Modifier
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp, vertical = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 item {
+                    Text(
+                        text = stringResource(Res.string.edit_exercise),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(Modifier.size(16.dp))
                     ListItem(
                         headlineContent = {
                             Text(workoutExercise.exercise.name)
@@ -92,7 +101,7 @@ fun ExerciseBottomSheet(
                             )
                         },
                         modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
+                            .clip(RoundedCornerShape(12.dp))
                             .clickable{
                                 onExerciseClick()
                             }
@@ -146,8 +155,8 @@ fun ExerciseBottomSheet(
                         },
                         modifier = Modifier
                             .border(BorderStroke(2.dp, MaterialTheme.colorScheme.outline),
-                                RoundedCornerShape(4.dp))
-                            .clip(RoundedCornerShape(4.dp))
+                                RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(12.dp))
                             .clickable{
                                 viewModel.onAddSet(workoutExercise.id)
                             }

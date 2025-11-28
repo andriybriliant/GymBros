@@ -1,18 +1,23 @@
 package com.andriibryliant.gymbros.presentation.exercise.exercise_detail
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.OverscrollEffect
+import androidx.compose.foundation.OverscrollFactory
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -120,7 +125,6 @@ fun ExerciseDetailScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -135,6 +139,7 @@ fun ExerciseDetailScreen(
                 isError = nameError != null,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
             )
             if (nameError != null){
                Text(
@@ -146,11 +151,14 @@ fun ExerciseDetailScreen(
             Column{
                 Text(
                     text = stringResource(Res.string.muscle_groups),
-                    style = MaterialTheme.typography.labelLarge
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
                 )
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
                 ) {
                     items(muscleGroups){ group ->
                         FilterChip(
@@ -171,7 +179,10 @@ fun ExerciseDetailScreen(
                     }
                 }
             }
-            Column {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+            ) {
                 Text(
                     text = stringResource(Res.string.icon),
                     style = MaterialTheme.typography.labelLarge

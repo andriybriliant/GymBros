@@ -1,9 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="filter_workouts">Filtruj Treningi</string>
+    <string name="filter_exercises">Filtruj Ćwiczenia</string>
     <string name="settings">Ustawienia</string>
     <string name="add_workout">Dodaj Trening</string>
     <string name="add_exercise">Dodaj Ćwiczenie</string>
     <string name="workouts">Treningi</string>
     <string name="exercises">Ćwiczenia</string>
+
+    <string name="chest_group">Chest</string>
+    <string name="back_group">Back</string>
+    <string name="legs_group">Legs</string>
+    <string name="biceps_group">Biceps</string>
+    <string name="triceps_group">Triceps</string>
+    <string name="forearms_group">Forearms</string>
+    <string name="abs_group">Abs</string>
+    <string name="name">Name</string>
+    <string name="muscle_groups">Muscle Groups</string>
+    <string name="icon">Icon</string>
+    <string name="save">Save</string>
+    <string name="choose_icon">Choose Icon</string>
+    <string name="edit_exercise">Edit Exercise</string>
+    <string name="no_name_specified">No Name Specified</string>
+    <string name="delete">Delete</string>
+    <string name="sets">Sets</string>
+    <string name="choose_exercise">Choose Exercise</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_set">Add Set</string>
+    <string name="edit_workout">Edit Workout</string>
+    <string name="edit_set">Edit Set</string>
+    <string name="reps">Reps</string>
+    <string name="edit_set_weight">Weight (kg)</string>
+    <string name="delete_workout_title">Delete Workout?</string>
+    <string name="delete_workout_prompt">Are you sure you want to delete this workout? This action cannot be undone</string>
+    <string name="delete_exercise_title">Delete Exercise?</string>
+    <string name="delete_exercise_prompt">Are you sure you want to delete this exercise? This action cannot be undone</string>
+    <string name="discard_changes_title">Discard Changes?</string>
+    <string name="discard_changes_prompt">Are you sure you want to discard your changes?</string>
+    <string name="discard_confirm">Discard</string>
+    <string name="workout">Workout</string>
+    <string name="language">Język</string>
+    <string name="dynamic_color">Dynamic Color</string>
+    <string name="dynamic_color_label">Use dynamic color provided by your system</string>
+    <string name="theme_mode">Theme Mode</string>
+    <string name="system">System</string>
+    <string name="dark">Ciemny</string>
+    <string name="light">Jasny</string>
+
+    <string name="english">English</string>
+    <string name="polish">Polski</string>
+    <string name="ukrainian">Українська</string>
 </resources>

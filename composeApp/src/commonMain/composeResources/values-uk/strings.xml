@@ -6,4 +6,48 @@
     <string name="add_exercise">Додати Вправу</string>
     <string name="workouts">Тренування</string>
     <string name="exercises">Вправи</string>
+
+    <string name="chest_group">Chest</string>
+    <string name="back_group">Back</string>
+    <string name="legs_group">Legs</string>
+    <string name="biceps_group">Biceps</string>
+    <string name="triceps_group">Triceps</string>
+    <string name="forearms_group">Forearms</string>
+    <string name="abs_group">Abs</string>
+    <string name="name">Name</string>
+    <string name="muscle_groups">Muscle Groups</string>
+    <string name="icon">Icon</string>
+    <string name="save">Save</string>
+    <string name="choose_icon">Choose Icon</string>
+    <string name="edit_exercise">Edit Exercise</string>
+    <string name="no_name_specified">No Name Specified</string>
+    <string name="delete">Delete</string>
+    <string name="sets">Sets</string>
+    <string name="choose_exercise">Choose Exercise</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_set">Add Set</string>
+    <string name="edit_workout">Edit Workout</string>
+    <string name="edit_set">Edit Set</string>
+    <string name="reps">Reps</string>
+    <string name="edit_set_weight">Weight (kg)</string>
+    <string name="delete_workout_title">Delete Workout?</string>
+    <string name="delete_workout_prompt">Are you sure you want to delete this workout? This action cannot be undone</string>
+    <string name="delete_exercise_title">Delete Exercise?</string>
+    <string name="delete_exercise_prompt">Are you sure you want to delete this exercise? This action cannot be undone</string>
+    <string name="discard_changes_title">Discard Changes?</string>
+    <string name="discard_changes_prompt">Are you sure you want to discard your changes?</string>
+    <string name="discard_confirm">Discard</string>
+    <string name="workout">Workout</string>
+    <string name="language">Language</string>
+    <string name="dynamic_color">Dynamic Color</string>
+    <string name="dynamic_color_label">Use dynamic color provided by your system</string>
+    <string name="theme_mode">Theme Mode</string>
+    <string name="system">System</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+
+
+    <string name="english">English</string>
+    <string name="polish">Polski</string>
+    <string name="ukrainian">Українська</string>
 </resources>

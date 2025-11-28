@@ -8,6 +8,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import com.andriibryliant.gymbros.domain.AppThemeMode
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -251,16 +252,40 @@ val unspecified_scheme = ColorFamily(
 
 @Composable
 fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    //darkTheme: Boolean = isSystemInDarkTheme(),
+    themeMode: AppThemeMode = AppThemeMode.SYSTEM,
+    dynamicColor: Boolean,
     // Dynamic color is available on Android 12+
     content: @Composable() () -> Unit
 ) {
-  val colorScheme = if (darkTheme) darkScheme else lightScheme
 
-  MaterialTheme(
-    colorScheme = colorScheme,
-    typography = AppTypography,
-    content = content
-  )
+    val darkTheme = when(themeMode){
+        AppThemeMode.DARK -> true
+        AppThemeMode.LIGHT -> false
+        AppThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
+
+    val dynamicSupported = isDynamicColorAvailable()
+
+    val darkOrLight = if (darkTheme) darkScheme else lightScheme
+
+    val colorScheme = when{
+        dynamicColor && dynamicSupported -> getDynamicColorScheme(darkTheme) ?: darkOrLight
+        else -> darkOrLight
+    }
+
+//    val colorScheme = if (darkTheme) darkScheme else lightScheme
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = AppTypography,
+        content = content
+    )
 }
+
+@Composable
+expect fun isDynamicColorAvailable(): Boolean
+
+@Composable
+expect fun getDynamicColorScheme(darkTheme: Boolean): ColorScheme?
 
