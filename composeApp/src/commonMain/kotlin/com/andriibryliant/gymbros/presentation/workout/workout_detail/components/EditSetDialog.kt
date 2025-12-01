@@ -2,6 +2,7 @@ package com.andriibryliant.gymbros.presentation.workout.workout_detail.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -11,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.andriibryliant.gymbros.domain.model.Set
 import gymbros.composeapp.generated.resources.Res
@@ -53,13 +55,19 @@ fun EditSetDialog(
                     value = reps,
                     onValueChange = { reps = it },
                     label = { Text(stringResource(Res.string.reps)) },
-                    singleLine = true
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    )
                 )
                 OutlinedTextField(
                     value = weight,
                     onValueChange = { weight = it },
                     label = { Text(stringResource(Res.string.edit_set_weight)) },
-                    singleLine = true
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal
+                    )
                 )
             }
         }
