@@ -65,4 +65,8 @@ interface ExerciseDao {
     @Transaction
     @Query("SELECT * FROM exercises ORDER BY name ASC")
     fun getAllExercisesWithMuscleGroups(): Flow<List<ExerciseWithMuscleGroups>>
+
+    @Transaction
+    @Query("SELECT * FROM exercises e JOIN ExerciseMuscleGroupCrossRef m ON e.exerciseId = m.exerciseId WHERE m.muscleGroupId IN (:groups) GROUP BY e.exerciseId")
+    fun getExercisesByMuscleGroups(groups: List<Long>): Flow<List<ExerciseWithMuscleGroups>>
 }

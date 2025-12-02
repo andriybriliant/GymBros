@@ -14,6 +14,7 @@
     <string name="biceps_group">Biceps</string>
     <string name="triceps_group">Triceps</string>
     <string name="forearms_group">Forearms</string>
+    <string name="shoulders_group">Shoulders</string>
     <string name="abs_group">Abs</string>
     <string name="name">Name</string>
     <string name="muscle_groups">Muscle Groups</string>

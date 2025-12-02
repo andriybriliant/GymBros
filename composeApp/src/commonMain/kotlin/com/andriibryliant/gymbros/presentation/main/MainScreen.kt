@@ -5,13 +5,17 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -41,6 +45,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andriibryliant.gymbros.domain.model.Exercise
+import com.andriibryliant.gymbros.domain.model.StoredMuscleGroupString
 import com.andriibryliant.gymbros.domain.model.Workout
 import com.andriibryliant.gymbros.presentation.exercise.ExerciseViewModel
 import com.andriibryliant.gymbros.presentation.exercise.exercise_list.ExerciseListScreen
@@ -69,9 +74,12 @@ fun MainScreen(
     onAddExerciseClick: () -> Unit
 ){
     var showDatePicker by remember { mutableStateOf(false) }
+    var showExerciseFilter by remember { mutableStateOf(false) }
     val selectedTab by mainScreenViewModel.selectedTabIndex.collectAsStateWithLifecycle()
     val startDate = workoutViewModel.startDateString
     val endDate = workoutViewModel.endDateString
+    val muscleGroups by exerciseViewModel.muscleGroups.collectAsState()
+    val selectedMuscleGroups = exerciseViewModel.selectedMuscleGroupsIds
 
     Scaffold(
         topBar = {
@@ -85,6 +93,14 @@ fun MainScreen(
                 onFilterBarClick = {
                     if(selectedTab == 0){
                         showDatePicker = true
+                    }
+                    if(selectedTab == 1){
+                        showExerciseFilter = !showExerciseFilter
+                        if(!showExerciseFilter){
+                            exerciseViewModel.fetchExercises()
+                        }else{
+                            exerciseViewModel.getExercisesByMuscleGroups()
+                        }
                     }
                 }
             )
@@ -199,12 +215,50 @@ fun MainScreen(
                     )
                 }
             }else if(selectedTab == 1){
-                ExerciseListScreen(
-                    viewModel = exerciseViewModel,
-                    onExerciseClick = onExerciseClick
-                )
+                Column(
+                    modifier = Modifier
+                        .background(color = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    AnimatedVisibility(
+                        visible = showExerciseFilter,
+//                        modifier = Modifier
+//                            .padding(horizontal = 16.dp)
+                    ){
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
+                        ) {
+//                            item {
+//                                Spacer(Modifier.size(16.dp))
+//                            }
+                            items(muscleGroups){ group ->
+                                FilterChip(
+                                    selected = group.id in selectedMuscleGroups,
+                                    onClick = {
+                                        exerciseViewModel.onMuscleGroupToggle(group)
+                                    },
+                                    label = {
+                                        Text(
+                                            stringResource(StoredMuscleGroupString.asStringResource(group.name))
+                                        )
+                                    },
+                                    colors = FilterChipDefaults.filterChipColors(
+                                        selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                        selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                                        containerColor = MaterialTheme.colorScheme.surface,
+                                        labelColor = MaterialTheme.colorScheme.onSurface
+                                    ),
+                                )
+                            }
+                        }
+                    }
+                    ExerciseListScreen(
+                        viewModel = exerciseViewModel,
+                        onExerciseClick = onExerciseClick
+                    )
+                }
             }
-
         }
     }
 

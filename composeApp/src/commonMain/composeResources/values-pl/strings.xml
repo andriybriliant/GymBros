@@ -14,6 +14,7 @@
     <string name="biceps_group">Biceps</string>
     <string name="triceps_group">Triceps</string>
     <string name="forearms_group">Przedramiona</string>
+    <string name="shoulders_group">Ramiona</string>
     <string name="abs_group">Brzuch</string>
     <string name="name">Nazwa</string>
     <string name="muscle_groups">Grupy Mięśni</string>

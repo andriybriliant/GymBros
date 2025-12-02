@@ -58,4 +58,10 @@ class DefaultExerciseRepository(
     override suspend fun deleteExercise(exercise: Exercise) {
         db.exerciseDao.deleteExercise(exercise.toEntity())
     }
+
+    override fun getExercisesByMuscleGroups(groups: List<Long>): Flow<List<Exercise>>{
+        return db.exerciseDao.getExercisesByMuscleGroups(groups).map { exercises ->
+            exercises.map { it.toDomain() }
+        }
+    }
 }

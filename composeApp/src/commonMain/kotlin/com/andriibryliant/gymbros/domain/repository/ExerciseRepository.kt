@@ -11,4 +11,5 @@ interface ExerciseRepository {
     suspend fun insertExercise(exercise: Exercise)
     suspend fun updateExercise(exercise: Exercise)
     suspend fun deleteExercise(exercise: Exercise)
+    fun getExercisesByMuscleGroups(groups: List<Long>): Flow<List<Exercise>>
 }

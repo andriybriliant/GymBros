@@ -14,6 +14,7 @@ import com.andriibryliant.gymbros.domain.usecase.exercise.DeleteExerciseUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.ExerciseUseCases
 import com.andriibryliant.gymbros.domain.usecase.exercise.GetAllExercisesUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.GetExerciseByIdUseCase
+import com.andriibryliant.gymbros.domain.usecase.exercise.GetExercisesByMuscleGroupsUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.GetMuscleGroupsUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.InsertExerciseUseCase
 import com.andriibryliant.gymbros.domain.usecase.exercise.UpdateExerciseUseCase
@@ -62,7 +63,7 @@ val appModule = module {
                     super.onCreate(connection)
                     CoroutineScope(Dispatchers.IO).launch {
                         val prepopulateMuscleGroups = listOf(
-                            "chest", "back", "legs", "biceps", "triceps", "forearms", "abs"
+                            "chest", "back", "legs", "biceps", "triceps", "forearms", "abs", "shoulders"
                         ).map { MuscleGroupEntity(name = it) }
                         val db = get<AppDatabase>()
                         db.exerciseDao.insertAllMuscleGroups(prepopulateMuscleGroups)
@@ -103,7 +104,8 @@ val appModule = module {
             getExerciseByIdUseCase = GetExerciseByIdUseCase(get()),
             insertExerciseUseCase = InsertExerciseUseCase(get()),
             updateExerciseUseCase = UpdateExerciseUseCase(get()),
-            deleteExerciseUseCase = DeleteExerciseUseCase(get())
+            deleteExerciseUseCase = DeleteExerciseUseCase(get()),
+            getExercisesByMuscleGroupsUseCase = GetExercisesByMuscleGroupsUseCase(get())
         )
     }
 

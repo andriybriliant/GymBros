@@ -7,6 +7,7 @@ import gymbros.composeapp.generated.resources.biceps_group
 import gymbros.composeapp.generated.resources.chest_group
 import gymbros.composeapp.generated.resources.forearms_group
 import gymbros.composeapp.generated.resources.legs_group
+import gymbros.composeapp.generated.resources.shoulders_group
 import gymbros.composeapp.generated.resources.triceps_group
 import org.jetbrains.compose.resources.StringResource
 
@@ -20,6 +21,7 @@ enum class StoredMuscleGroupString(
     BicepsString(Res.string.biceps_group, "biceps"),
     TricepsString(Res.string.triceps_group, "triceps"),
     ForearmsString(Res.string.forearms_group, "forearms"),
+    ShouldersString(Res.string.shoulders_group, "shoulders"),
     AbsString(Res.string.abs_group, "abs");
 
     companion object{
