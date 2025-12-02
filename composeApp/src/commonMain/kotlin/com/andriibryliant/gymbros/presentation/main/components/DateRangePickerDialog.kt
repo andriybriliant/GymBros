@@ -10,9 +10,13 @@ import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import gymbros.composeapp.generated.resources.Res
+import gymbros.composeapp.generated.resources.cancel
+import gymbros.composeapp.generated.resources.save
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -35,14 +39,14 @@ fun DateRangePickerDialog(
                     onConfirm(start, end)
                 }
             ){
-                Text("Save")
+                Text(stringResource(Res.string.save))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismiss
             ){
-                Text("Cancel")
+                Text(stringResource(Res.string.cancel))
             }
         },
         modifier = Modifier

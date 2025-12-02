@@ -123,9 +123,7 @@ fun App(
                     val viewModel = koinViewModel<WorkoutDetailViewModel>()
                     val bottomSheetViewModel = koinViewModel<ExerciseBottomSheetViewModel>()
 
-                    LaunchedEffect(workoutId) {
-                        viewModel.onEditWorkout(workoutId)
-                    }
+                    viewModel.onEditWorkout(workoutId)
 
                     val savedStateHandle = navController.currentBackStackEntry
                         ?.savedStateHandle
@@ -164,9 +162,7 @@ fun App(
                     val viewModel = koinViewModel<WorkoutDetailViewModel>()
                     val bottomSheetViewModel = koinViewModel<ExerciseBottomSheetViewModel>()
 
-                    LaunchedEffect(true) {
-                        viewModel.onAddWorkout()
-                    }
+                    viewModel.onAddWorkout()
 
                     val savedStateHandle = navController.currentBackStackEntry
                         ?.savedStateHandle
@@ -248,9 +244,7 @@ fun App(
                     val savedStateHandle = navController.currentBackStackEntry
                         ?.savedStateHandle
 
-                    LaunchedEffect(exerciseId) {
-                        viewModel.onSelectExercise(exerciseId)
-                    }
+                    viewModel.onSelectExercise(exerciseId)
 
                     LaunchedEffect(true) {
                         savedStateHandle?.getStateFlow<String?>("selectedExerciseIcon", "")

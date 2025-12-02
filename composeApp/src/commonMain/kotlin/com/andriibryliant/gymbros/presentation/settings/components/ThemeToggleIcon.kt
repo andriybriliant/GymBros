@@ -37,11 +37,11 @@ fun ThemeToggleIcon(isDark: AppThemeMode) {
             }
         },
         label = "scale"
-    ) { state ->
+    ) {
         1f
     }
 
-    val alpha by transition.animateFloat(label = "alpha") { state ->
+    val alpha by transition.animateFloat(label = "alpha") {
         1f
     }
 

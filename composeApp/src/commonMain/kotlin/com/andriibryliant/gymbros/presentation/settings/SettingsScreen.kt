@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.DropdownMenu
@@ -42,6 +43,7 @@ import com.andriibryliant.gymbros.presentation.settings.components.LanguageBotto
 import com.andriibryliant.gymbros.presentation.settings.components.ThemeToggleIcon
 import com.andriibryliant.gymbros.presentation.theme.isDynamicColorAvailable
 import gymbros.composeapp.generated.resources.Res
+import gymbros.composeapp.generated.resources.about_label
 import gymbros.composeapp.generated.resources.dark
 import gymbros.composeapp.generated.resources.dynamic_color
 import gymbros.composeapp.generated.resources.dynamic_color_label
@@ -81,6 +83,7 @@ fun SettingsScreen(
                 modifier = Modifier
                     .padding(paddingValues)
             ) {
+                //Language change row
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -124,7 +127,7 @@ fun SettingsScreen(
                     )
                 }
 
-
+                //Dynamic color row(Android only)
                 if(isDynamicColorAvailable()){
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -170,7 +173,7 @@ fun SettingsScreen(
                     }
                 }
 
-
+                //Dark theme row
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -253,6 +256,37 @@ fun SettingsScreen(
                                 }
                             )
                         }
+                    }
+                }
+
+                //About row
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable{
+
+                        }
+                        .padding(horizontal = 24.dp, vertical = 8.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Icon(
+                            Icons.Default.Info,
+                            null,
+                            modifier = Modifier
+                                .size(32.dp)
+                        )
+                        Spacer(Modifier.size(8.dp))
+                        Text(
+                            text = stringResource(Res.string.about_label),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .animateContentSize()
+                        )
                     }
                 }
             }

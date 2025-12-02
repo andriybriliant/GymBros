@@ -46,6 +46,7 @@
     <string name="system">System</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
+    <string name="about_label">About GymBros</string>
 
     <string name="english">English</string>
     <string name="polish">Polski</string>
