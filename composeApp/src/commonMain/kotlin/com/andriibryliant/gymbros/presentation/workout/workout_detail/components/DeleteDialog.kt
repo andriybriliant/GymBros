@@ -1,11 +1,18 @@
 package com.andriibryliant.gymbros.presentation.workout.workout_detail.components
 
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.unit.dp
 import gymbros.composeapp.generated.resources.Res
 import gymbros.composeapp.generated.resources.cancel
 import gymbros.composeapp.generated.resources.delete
@@ -57,6 +64,13 @@ fun DeleteDialog(
                     DeleteDialogState.DeleteExercise -> Res.string.delete_exercise_prompt
                 }
             ))
+        },
+        icon = {
+            Icon(
+                Icons.Rounded.Warning,
+                null,
+                modifier = Modifier.size(56.dp)
+            )
         }
     )
 }

@@ -63,7 +63,8 @@ fun SettingsScreen(
     onBackClick: () -> Unit,
     onLanguageChange: (String) -> Unit,
     onAppThemeChange: (AppThemeMode) -> Unit,
-    onDynamicColorChange: (Boolean) -> Unit
+    onDynamicColorChange: (Boolean) -> Unit,
+    onAboutClick: () -> Unit
 ){
     var showLanguageSheet by remember { mutableStateOf(false) }
     var showModeDropDown by remember { mutableStateOf(false) }
@@ -266,7 +267,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable{
-
+                            onAboutClick()
                         }
                         .padding(horizontal = 24.dp, vertical = 8.dp)
                 ) {

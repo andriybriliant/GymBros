@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -97,9 +98,7 @@ fun MainScreen(
                     if(selectedTab == 1){
                         showExerciseFilter = !showExerciseFilter
                         if(!showExerciseFilter){
-                            exerciseViewModel.fetchExercises()
-                        }else{
-                            exerciseViewModel.getExercisesByMuscleGroups()
+                            exerciseViewModel.clearSelectedFilter()
                         }
                     }
                 }
@@ -221,17 +220,12 @@ fun MainScreen(
                 ) {
                     AnimatedVisibility(
                         visible = showExerciseFilter,
-//                        modifier = Modifier
-//                            .padding(horizontal = 16.dp)
                     ){
                         LazyRow(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
                         ) {
-//                            item {
-//                                Spacer(Modifier.size(16.dp))
-//                            }
                             items(muscleGroups){ group ->
                                 FilterChip(
                                     selected = group.id in selectedMuscleGroups,
@@ -243,9 +237,18 @@ fun MainScreen(
                                             stringResource(StoredMuscleGroupString.asStringResource(group.name))
                                         )
                                     },
+                                    leadingIcon = {
+                                        if (group.id in selectedMuscleGroups){
+                                            Icon(
+                                                Icons.Default.Check,
+                                                null
+                                            )
+                                        }
+                                    },
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = MaterialTheme.colorScheme.primary,
                                         selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                                        selectedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
                                         containerColor = MaterialTheme.colorScheme.surface,
                                         labelColor = MaterialTheme.colorScheme.onSurface
                                     ),

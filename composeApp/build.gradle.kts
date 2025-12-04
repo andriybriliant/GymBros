@@ -45,7 +45,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.compose)
-            implementation("io.insert-koin:koin-android:4.1.1")
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -61,10 +61,10 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
             implementation(libs.jetbrains.compose.navigation)
-            implementation("org.jetbrains.compose.ui:ui-backhandler:1.9.3")
-            implementation("dev.burnoo:compose-remember-setting:1.0.2")
-            implementation("com.russhwolf:multiplatform-settings:1.3.0")
-            implementation("com.russhwolf:multiplatform-settings-no-arg:1.3.0")
+            implementation(libs.jetbrains.ui.backhandler)
+            implementation(libs.compose.remember.setting)
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
             implementation(libs.material.icons.extended)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)

@@ -43,6 +43,7 @@ fun ChooseExerciseIconScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
+                .padding(horizontal = 16.dp)
         ){
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
@@ -55,11 +56,11 @@ fun ChooseExerciseIconScreen(
                             onIconClicked(entry.storedName)
                         },
                         modifier = Modifier
-                            .size(64.dp),
+                            .size(72.dp),
                         colors = IconButtonDefaults.filledIconButtonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         ),
-                        shape = RoundedCornerShape(10.dp)
+                        shape = RoundedCornerShape(12.dp)
                     ){
                         Icon(
                             painterResource(entry.resource),

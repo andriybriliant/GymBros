@@ -66,6 +66,11 @@ class ExerciseViewModel(
         getExercisesByMuscleGroups()
     }
 
+    fun clearSelectedFilter(){
+        selectedMuscleGroupsIds.clear()
+        fetchExercises()
+    }
+
     fun getExercisesByMuscleGroups(){
         if (selectedMuscleGroupsIds.isEmpty()){
             fetchExercises()

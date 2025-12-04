@@ -42,7 +42,7 @@ fun ExerciseListScreen(
     val exercises by viewModel.exercises.collectAsStateWithLifecycle()
 
     LaunchedEffect(true){
-        viewModel.fetchExercises()
+        viewModel.getExercisesByMuscleGroups()
     }
 
     Surface(

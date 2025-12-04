@@ -1,5 +1,10 @@
 package com.andriibryliant.gymbros.presentation.app
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.ColorScheme
@@ -11,6 +16,8 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.key.Key.Companion.Settings
 import androidx.compose.ui.text.intl.Locale
 import androidx.navigation.compose.NavHost
@@ -21,6 +28,7 @@ import androidx.navigation.toRoute
 import com.andriibryliant.gymbros.domain.AppThemeMode
 import com.andriibryliant.gymbros.domain.localization.Language
 import com.andriibryliant.gymbros.domain.localization.Localization
+import com.andriibryliant.gymbros.presentation.about.AboutScreen
 import com.andriibryliant.gymbros.presentation.exercise.ExerciseViewModel
 import com.andriibryliant.gymbros.presentation.exercise.exercise_detail.ExerciseDetailScreen
 import com.andriibryliant.gymbros.presentation.exercise.exercise_detail.ExerciseDetailViewModel
@@ -123,7 +131,9 @@ fun App(
                     val viewModel = koinViewModel<WorkoutDetailViewModel>()
                     val bottomSheetViewModel = koinViewModel<ExerciseBottomSheetViewModel>()
 
-                    viewModel.onEditWorkout(workoutId)
+                    LaunchedEffect(true){
+                        viewModel.onEditWorkout(workoutId)
+                    }
 
                     val savedStateHandle = navController.currentBackStackEntry
                         ?.savedStateHandle
@@ -244,7 +254,9 @@ fun App(
                     val savedStateHandle = navController.currentBackStackEntry
                         ?.savedStateHandle
 
-                    viewModel.onSelectExercise(exerciseId)
+                    LaunchedEffect(true){
+                        viewModel.onSelectExercise(exerciseId)
+                    }
 
                     LaunchedEffect(true) {
                         savedStateHandle?.getStateFlow<String?>("selectedExerciseIcon", "")
@@ -310,16 +322,18 @@ fun App(
                     )
                 }
                 composable<Route.Settings>(
-                    exitTransition = {
+                    popExitTransition = {
                         slideOutHorizontally { initialOffset ->
                             initialOffset
                         }
                     },
+                    exitTransition = { slideOutHorizontally() },
                     enterTransition = {
                         slideInHorizontally { initialOffset ->
                             initialOffset
                         }
-                    }
+                    },
+                    popEnterTransition = { slideInHorizontally() }
                 ) {
                     SettingsScreen(
                         language = selectedLanguage,
@@ -337,6 +351,29 @@ fun App(
                         },
                         onDynamicColorChange = { isDynamic ->
                             appThemeController.saveDynamicColor(isDynamic)
+                        },
+                        onAboutClick = {
+                            navController.navigate(Route.About)
+                        }
+                    )
+                }
+                composable<Route.About>(
+                    popExitTransition = {
+                        slideOutHorizontally { initialOffset ->
+                            initialOffset
+                        }
+                    },
+                    exitTransition = { slideOutHorizontally() },
+                    enterTransition = {
+                        slideInHorizontally { initialOffset ->
+                            initialOffset
+                        }
+                    },
+                    popEnterTransition = { slideInHorizontally() }
+                ) {
+                    AboutScreen(
+                        onBackClick = {
+                            navController.navigateUp()
                         }
                     )
                 }
