@@ -23,7 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import gymbros.composeapp.generated.resources.Res
+import gymbros.composeapp.generated.resources.ic_app_icon
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,8 +79,9 @@ fun TopBarWithFilter(
                 onClick = {}
             ){
                 Icon(
-                    Icons.Default.FitnessCenter,
-                    "Logo"
+                    painter = painterResource(Res.drawable.ic_app_icon),
+                    "Logo",
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         },
